@@ -67,7 +67,7 @@ export function HeroSection() {
               <Phone className="h-6 w-6 text-primary" />
             </div>
             <h3 className="mb-2 font-semibold text-card-foreground">Quick Response</h3>
-            <p className="text-sm text-muted-foreground">Instant connection to nearby shelters ready to help</p>
+            <p className="text-sm text-muted-foreground">Instant connection to nearby shelters and ready to help</p>
           </div>
 
           <div className="rounded-xl bg-card p-6 text-center shadow-sm">

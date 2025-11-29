@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -23,19 +23,54 @@ interface ReportCardProps {
 }
 
 export function ReportCard({ report, isAdmin }: ReportCardProps) {
+  const [deviceId, setDeviceId] = useState<string>("");
   const [liked, setLiked] = useState(false);
   const [likesCount, setLikesCount] = useState(report.likes?.length || 0);
+  const [commentsCount, setCommentsCount] = useState(report.comments?.length || 0);
   const [commentText, setCommentText] = useState("");
   const [isCommentDialogOpen, setIsCommentDialogOpen] = useState(false);
   const [isSubmittingComment, setIsSubmittingComment] = useState(false);
 
-  const handleLike = async () => {
-    // Optimistic update
-    setLiked(!liked);
-    setLikesCount(liked ? likesCount - 1 : likesCount + 1);
+  useEffect(() => {
+    // Get device ID from localStorage
+    const id = localStorage.getItem("animal_helpline_device_id");
+    if (id) {
+      setDeviceId(id);
 
-    toast.success(liked ? "Like removed" : "Liked!");
-    // TODO: Call API to persist like
+      // Check if current user has liked this report
+      const userLike = report.likes?.find((like: any) => like.user?.deviceId === id);
+      setLiked(!!userLike);
+    }
+  }, [report.likes]);
+
+  const handleLike = async () => {
+    if (!deviceId) {
+      toast.error("Please upload a report first to interact");
+      return;
+    }
+
+    // Optimistic update
+    const newLiked = !liked;
+    setLiked(newLiked);
+    setLikesCount(newLiked ? likesCount + 1 : likesCount - 1);
+
+    try {
+      const res = await fetch(`/api/reports/${report.id}/like`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ deviceId }),
+      });
+
+      if (!res.ok) throw new Error("Failed to toggle like");
+
+      const data = await res.json();
+      toast.success(data.liked ? "Liked!" : "Like removed");
+    } catch (error) {
+      // Revert on error
+      setLiked(!newLiked);
+      setLikesCount(newLiked ? likesCount : likesCount + 1);
+      toast.error("Failed to update like");
+    }
   };
 
   const handleCommentSubmit = async () => {
@@ -44,17 +79,31 @@ export function ReportCard({ report, isAdmin }: ReportCardProps) {
       return;
     }
 
+    if (!deviceId) {
+      toast.error("Please upload a report first to comment");
+      return;
+    }
+
     setIsSubmittingComment(true);
 
-    // Simulate API call
-    setTimeout(() => {
+    try {
+      const res = await fetch(`/api/reports/${report.id}/comment`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ deviceId, text: commentText }),
+      });
+
+      if (!res.ok) throw new Error("Failed to post comment");
+
       toast.success("Comment posted successfully!");
       setCommentText("");
       setIsCommentDialogOpen(false);
+      setCommentsCount(commentsCount + 1);
+    } catch (error) {
+      toast.error("Failed to post comment");
+    } finally {
       setIsSubmittingComment(false);
-    }, 500);
-
-    // TODO: Call API to post comment
+    }
   };
 
   const handleDonate = () => {
@@ -143,10 +192,10 @@ export function ReportCard({ report, isAdmin }: ReportCardProps) {
             <DialogTrigger asChild>
               <Button variant="ghost" size="sm" className="gap-1.5">
                 <MessageCircle className="h-4 w-4" />
-                <span className="font-medium">{report.comments?.length || 0}</span>
+                <span className="font-medium">{commentsCount}</span>
               </Button>
             </DialogTrigger>
-            <DialogContent className="sm:max-w-[500px]">
+            <DialogContent className="sm:max-w-[500px] z-[100]">
               <DialogHeader>
                 <DialogTitle>Add Comment</DialogTitle>
                 <DialogDescription>

@@ -3,7 +3,7 @@
 import React, { useState, useRef, useCallback, useEffect } from "react";
 import Webcam from "react-webcam";
 import { v4 as uuidv4 } from "uuid";
-import { Camera, Upload, X, Loader2, AlertCircle, CheckCircle2 } from "lucide-react";
+import { Camera, Upload, X, Loader2, AlertCircle, CheckCircle2, MapPin } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
@@ -15,6 +15,9 @@ export function PhotoUpload() {
     const [isAnalyzing, setIsAnalyzing] = useState(false);
     const [analysisResult, setAnalysisResult] = useState<any>(null);
     const [error, setError] = useState<string | null>(null);
+    const [location, setLocation] = useState<{ lat: number; lng: number } | null>(null);
+    const [locationError, setLocationError] = useState<string | null>(null);
+
     const webcamRef = useRef<Webcam>(null);
     const fileInputRef = useRef<HTMLInputElement>(null);
 
@@ -26,6 +29,24 @@ export function PhotoUpload() {
             localStorage.setItem("animal_helpline_device_id", id);
         }
         setDeviceId(id);
+
+        // Get location
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(
+                (position) => {
+                    setLocation({
+                        lat: position.coords.latitude,
+                        lng: position.coords.longitude,
+                    });
+                },
+                (err) => {
+                    console.error("Error getting location:", err);
+                    setLocationError("Could not get location. Please enable location services.");
+                }
+            );
+        } else {
+            setLocationError("Geolocation is not supported by this browser.");
+        }
     }, []);
 
     const capture = useCallback(() => {
@@ -69,26 +90,33 @@ export function PhotoUpload() {
             const analyzeRes = await fetch("/api/analyze", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ image: imageUrl }), // Sending URL to OpenAI is faster/cheaper than base64 sometimes, but here we send URL
+                body: JSON.stringify({ image: imageUrl }),
             });
 
             if (!analyzeRes.ok) throw new Error("Failed to analyze image");
             const analysis = await analyzeRes.json();
             setAnalysisResult(analysis);
 
-            // 3. Submit Report
-            const reportRes = await fetch("/api/reports", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({
-                    deviceId,
-                    imageUrl,
-                    analysisResult: analysis,
-                    location: "Unknown", // TODO: Get geolocation
-                }),
-            });
+            // 3. Submit Report ONLY if animal is detected
+            if (analysis.isAnimal) {
+                const reportRes = await fetch("/api/reports", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({
+                        deviceId,
+                        imageUrl,
+                        analysisResult: analysis,
+                        location: location ? `${location.lat}, ${location.lng}` : "Unknown",
+                        latitude: location?.lat,
+                        longitude: location?.lng,
+                    }),
+                });
 
-            if (!reportRes.ok) console.error("Failed to save report");
+                if (!reportRes.ok) {
+                    console.error("Failed to save report");
+                    setError("Failed to save report to database");
+                }
+            }
 
         } catch (err) {
             console.error(err);
@@ -109,9 +137,17 @@ export function PhotoUpload() {
             <Card>
                 <CardHeader>
                     <CardTitle>Report Injured Animal</CardTitle>
-                    <CardDescription>Take a photo or upload to analyze.</CardDescription>
+                    <CardDescription>Take a photo or upload to analyze with AI.</CardDescription>
                 </CardHeader>
                 <CardContent className="space-y-4">
+                    {locationError && (
+                        <Alert variant="destructive">
+                            <MapPin className="h-4 w-4" />
+                            <AlertTitle>Location Error</AlertTitle>
+                            <AlertDescription>{locationError}</AlertDescription>
+                        </Alert>
+                    )}
+
                     {!image ? (
                         <div className="space-y-4">
                             {isCameraOpen ? (
@@ -190,10 +226,10 @@ export function PhotoUpload() {
                                     {isAnalyzing ? (
                                         <>
                                             <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                                            Analyzing...
+                                            Analyzing with AI...
                                         </>
                                     ) : (
-                                        "Analyze Image"
+                                        "Analyze & Submit"
                                     )}
                                 </Button>
                             )}
@@ -210,6 +246,24 @@ export function PhotoUpload() {
 
                     {analysisResult && (
                         <div className="space-y-4 animate-in fade-in slide-in-from-bottom-4">
+                            {analysisResult.isAnimal ? (
+                                <Alert variant="default" className="bg-green-50 border-green-200">
+                                    <CheckCircle2 className="h-4 w-4 text-green-600" />
+                                    <AlertTitle className="text-green-900">Report Submitted Successfully!</AlertTitle>
+                                    <AlertDescription className="text-green-800">
+                                        Your report has been submitted to the admin. Check the Community page to see all reports.
+                                    </AlertDescription>
+                                </Alert>
+                            ) : (
+                                <Alert variant="default" className="bg-blue-50 border-blue-200">
+                                    <AlertCircle className="h-4 w-4 text-blue-600" />
+                                    <AlertTitle className="text-blue-900">Analysis Complete</AlertTitle>
+                                    <AlertDescription className="text-blue-800">
+                                        No animal detected in this image. Report was not submitted.
+                                    </AlertDescription>
+                                </Alert>
+                            )}
+
                             <Alert variant={analysisResult.isInjured ? "destructive" : "default"}>
                                 {analysisResult.isInjured ? (
                                     <AlertCircle className="h-4 w-4" />

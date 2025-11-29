@@ -4,7 +4,7 @@ import { NextResponse } from "next/server";
 export async function POST(req: Request) {
     try {
         const body = await req.json();
-        const { deviceId, imageUrl, analysisResult, location } = body;
+        const { deviceId, imageUrl, analysisResult, location, latitude, longitude } = body;
 
         if (!deviceId || !imageUrl) {
             return NextResponse.json(
@@ -30,7 +30,9 @@ export async function POST(req: Request) {
                 userId: user.id,
                 imageUrl,
                 analysisResult: analysisResult || {},
-                location,
+                location: location || "Unknown",
+                latitude,
+                longitude,
                 status: "pending",
             },
         });
@@ -40,6 +42,36 @@ export async function POST(req: Request) {
         console.error("Error creating report:", error);
         return NextResponse.json(
             { error: "Failed to create report" },
+            { status: 500 }
+        );
+    }
+}
+
+export async function GET() {
+    try {
+        const reports = await prisma.report.findMany({
+            include: {
+                user: true,
+                likes: true,
+                comments: {
+                    include: {
+                        user: true,
+                    },
+                    orderBy: {
+                        createdAt: "desc",
+                    },
+                },
+            },
+            orderBy: {
+                createdAt: "desc",
+            },
+        });
+
+        return NextResponse.json(reports);
+    } catch (error) {
+        console.error("Error fetching reports:", error);
+        return NextResponse.json(
+            { error: "Failed to fetch reports" },
             { status: 500 }
         );
     }

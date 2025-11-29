@@ -1,0 +1,53 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../lib/generated/prisma"
+}
+
+datasource db {
+  provider = "mongodb"
+}
+
+model User {
+  id        String    @id @default(auto()) @map("_id") @db.ObjectId
+  deviceId  String    @unique
+  createdAt DateTime  @default(now())
+  reports   Report[]
+  comments  Comment[]
+  likes     Like[]
+}
+
+model Report {
+  id             String    @id @default(auto()) @map("_id") @db.ObjectId
+  userId         String    @db.ObjectId
+  user           User      @relation(fields: [userId], references: [id])
+  imageUrl       String
+  analysisResult Json?
+  location       String?   @default("Unknown")
+  latitude       Float?
+  longitude      Float?
+  status         String    @default("pending")
+  createdAt      DateTime  @default(now())
+  comments       Comment[]
+  likes          Like[]
+}
+
+model Comment {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  text      String
+  userId    String   @db.ObjectId
+  user      User     @relation(fields: [userId], references: [id])
+  reportId  String   @db.ObjectId
+  report    Report   @relation(fields: [reportId], references: [id])
+  createdAt DateTime @default(now())
+}
+
+model Like {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  userId    String   @db.ObjectId
+  user      User     @relation(fields: [userId], references: [id])
+  reportId  String   @db.ObjectId
+  report    Report   @relation(fields: [reportId], references: [id])
+  createdAt DateTime @default(now())
+
+  @@unique([userId, reportId])
+}

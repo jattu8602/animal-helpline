@@ -3,6 +3,7 @@
 import { Button } from "@/components/ui/button"
 import { Heart, Phone, MapPin } from "lucide-react"
 import Image from "next/image"
+import { PhotoUpload } from "./photo-upload"
 
 export function HeroSection() {
   const scrollToReport = () => {
@@ -44,6 +45,11 @@ export function HeroSection() {
             </Button>
           </div>
         </div>
+
+
+        
+          <PhotoUpload />
+        
 
         {/* Added animal images grid below hero content */}
         <div className="mx-auto mt-12 grid max-w-5xl grid-cols-2 gap-4 md:grid-cols-4">

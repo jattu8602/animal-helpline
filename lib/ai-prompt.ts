@@ -21,4 +21,5 @@ Analyze the image and provide a JSON response with the following structure:
 If no animal is found, set isAnimal to false and other fields to null or empty.
 If an animal is found but not injured, set isInjured to false.
 Be precise and helpful. This data will be used to prioritize rescue efforts.
+
 `;

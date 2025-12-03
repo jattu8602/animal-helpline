@@ -1,4 +1,4 @@
-import React from "react"
+import React from 'react'
 
 function AppLoading() {
   return (
@@ -13,16 +13,14 @@ function AppLoading() {
         />
       </div>
 
-      {/* Three running dots */}
-      <div className="mt-8 flex items-center gap-2">
-        <span className="h-2 w-2 animate-bounce rounded-full bg-white" style={{ animationDelay: "0ms" }} />
-        <span className="h-2 w-2 animate-bounce rounded-full bg-white" style={{ animationDelay: "150ms" }} />
-        <span className="h-2 w-2 animate-bounce rounded-full bg-white" style={{ animationDelay: "300ms" }} />
+      {/* Three loading dots that grow/shrink like a loading indicator */}
+      <div className="loading-dots mt-8 flex items-center gap-2">
+        <span className="h-2 w-2 rounded-full bg-white" />
+        <span className="h-2 w-2 rounded-full bg-white" />
+        <span className="h-2 w-2 rounded-full bg-white" />
       </div>
     </div>
   )
 }
 
 export default AppLoading
-
-

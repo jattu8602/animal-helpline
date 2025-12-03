@@ -16,12 +16,14 @@ interface LocationPermissionDialogProps {
   open: boolean
   onOpenChange: (open: boolean) => void
   onRequestLocation: () => void
+  error?: string | null
 }
 
 export function LocationPermissionDialog({
   open,
   onOpenChange,
   onRequestLocation,
+  error,
 }: LocationPermissionDialogProps) {
   const [animationData, setAnimationData] = useState<any>(null)
 
@@ -53,17 +55,29 @@ export function LocationPermissionDialog({
             )}
           </div>
 
-          <div className="space-y-2 w-full">
-            <Button
-              className="w-full gap-2 text-lg py-6 rounded-full"
-              onClick={onRequestLocation}
-            >
-              <MapPin className="h-5 w-5" />
-              Turn on Location
-            </Button>
-            <p className="text-xs text-muted-foreground">
-              Please allow location access in your browser popup
-            </p>
+          <div className="space-y-4 w-full">
+            {error && (
+              <div className="bg-blue-50 text-blue-700 p-4 rounded-xl text-sm font-medium border border-blue-100 shadow-sm">
+                {/* Mobile/Tablet Message */}
+                <p className="block md:hidden flex items-center justify-center gap-2">
+                  <span>📱</span> Please turn on your device location manually.
+                </p>
+                {/* Desktop Message */}
+                <p className="hidden md:block">
+                  Please allow location permissions from the icon 🔒/ℹ️ in the URL bar.
+                </p>
+              </div>
+            )}
+
+            <div className="space-y-2">
+              <Button
+                className="w-full gap-2 text-lg py-6 rounded-full"
+                onClick={onRequestLocation}
+              >
+                <MapPin className="h-5 w-5" />
+                Turn on Location
+              </Button>
+            </div>
           </div>
         </div>
       </DialogContent>

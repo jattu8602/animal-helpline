@@ -160,6 +160,7 @@ export function PhotoUpload() {
                 open={showLocationDialog}
                 onOpenChange={setShowLocationDialog}
                 onRequestLocation={handleRequestLocation}
+                error={locationError}
             />
 
             <Card>

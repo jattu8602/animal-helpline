@@ -7,6 +7,7 @@ import { Camera, Upload, X, Loader2, AlertCircle, CheckCircle2, MapPin } from "l
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import { LocationPermissionDialog } from "@/components/location-permission-dialog";
 
 export function PhotoUpload() {
     const [deviceId, setDeviceId] = useState<string>("");
@@ -17,6 +18,8 @@ export function PhotoUpload() {
     const [error, setError] = useState<string | null>(null);
     const [location, setLocation] = useState<{ lat: number; lng: number } | null>(null);
     const [locationError, setLocationError] = useState<string | null>(null);
+
+    const [showLocationDialog, setShowLocationDialog] = useState(false);
 
     const webcamRef = useRef<Webcam>(null);
     const fileInputRef = useRef<HTMLInputElement>(null);
@@ -30,7 +33,11 @@ export function PhotoUpload() {
         }
         setDeviceId(id);
 
-        // Get location
+        // Try to get location silently on mount
+        getLocation();
+    }, []);
+
+    const getLocation = () => {
         if (navigator.geolocation) {
             navigator.geolocation.getCurrentPosition(
                 (position) => {
@@ -38,16 +45,25 @@ export function PhotoUpload() {
                         lat: position.coords.latitude,
                         lng: position.coords.longitude,
                     });
+                    setLocationError(null);
+                    setShowLocationDialog(false); // Close dialog if successful
                 },
                 (err) => {
                     console.error("Error getting location:", err);
-                    setLocationError("Could not get location. Please enable location services.");
+                    // Don't set error immediately on mount, only when action is taken
+                    if (showLocationDialog) {
+                         setLocationError("Could not get location. Please enable location services.");
+                    }
                 }
             );
         } else {
             setLocationError("Geolocation is not supported by this browser.");
         }
-    }, []);
+    };
+
+    const handleRequestLocation = () => {
+        getLocation();
+    };
 
     const capture = useCallback(() => {
         const imageSrc = webcamRef.current?.getScreenshot();
@@ -70,6 +86,12 @@ export function PhotoUpload() {
 
     const analyzeImage = async () => {
         if (!image) return;
+
+        // Check for location before proceeding
+        if (!location) {
+            setShowLocationDialog(true);
+            return;
+        }
 
         setIsAnalyzing(true);
         setError(null);
@@ -134,6 +156,12 @@ export function PhotoUpload() {
 
     return (
         <div className="w-full max-w-md mx-auto p-4 space-y-4">
+            <LocationPermissionDialog
+                open={showLocationDialog}
+                onOpenChange={setShowLocationDialog}
+                onRequestLocation={handleRequestLocation}
+            />
+
             <Card>
                 <CardHeader>
                     <CardTitle>Report Injured Animal</CardTitle>

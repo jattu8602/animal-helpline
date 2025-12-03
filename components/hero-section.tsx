@@ -13,6 +13,23 @@ export function HeroSection() {
   return (
     <section className="relative overflow-hidden bg-gradient-to-br from-background via-accent/30 to-background py-20 md:py-32">
       <div className="container mx-auto px-4">
+        {/* App logo */}
+        {/* <div className="mb-8 flex items-center justify-center">
+          <div className="flex items-center gap-3 rounded-full bg-card/80 px-4 py-2 shadow-sm backdrop-blur">
+            <div className="relative h-10 w-10">
+              <Image
+                src="/logo.png"
+                alt="Animal Helpline logo"
+                fill
+                className="rounded-full object-contain"
+              />
+            </div>
+            <span className="text-sm font-semibold tracking-wide text-card-foreground">
+              Animal Helpline
+            </span>
+          </div>
+        </div> */}
+
         <div className="mx-auto max-w-4xl text-center">
           <div className="mb-6 inline-flex items-center gap-2 rounded-full bg-primary/10 px-4 py-2 text-sm font-medium text-primary">
             <Heart className="h-4 w-4" />
@@ -47,9 +64,9 @@ export function HeroSection() {
         </div>
 
 
-        
+
           <PhotoUpload />
-        
+
 
         {/* Added animal images grid below hero content */}
         <div className="mx-auto mt-12 grid max-w-5xl grid-cols-2 gap-4 md:grid-cols-4">

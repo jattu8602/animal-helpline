@@ -1,120 +1,146 @@
-"use client";
+'use client'
 
-import React, { useState, useEffect } from "react";
-import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
-import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
-import { Textarea } from "@/components/ui/textarea";
-import { Heart, MessageCircle, MapPin, Send } from "lucide-react";
-import dynamic from "next/dynamic";
-import { formatDistanceToNow } from "date-fns";
-import { toast } from "sonner";
+import React, { useState, useEffect } from 'react'
+import { Card, CardContent, CardFooter, CardHeader } from '@/components/ui/card'
+import { Badge } from '@/components/ui/badge'
+import { Button } from '@/components/ui/button'
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from '@/components/ui/dialog'
+import { Textarea } from '@/components/ui/textarea'
+import { Heart, MessageCircle, MapPin, Send } from 'lucide-react'
+import dynamic from 'next/dynamic'
+import { formatDistanceToNow } from 'date-fns'
+import { toast } from 'sonner'
 
 // Dynamically import MapView to avoid SSR issues with Leaflet
-const MapView = dynamic(() => import("@/components/map-view"), {
+const MapView = dynamic(() => import('@/components/map-view'), {
   ssr: false,
-  loading: () => <div className="h-[200px] w-full bg-muted animate-pulse rounded-md" />,
-});
+  loading: () => (
+    <div className="h-[200px] w-full bg-muted animate-pulse rounded-md" />
+  ),
+})
 
 interface ReportCardProps {
-  report: any;
-  isAdmin?: boolean;
+  report: any
+  isAdmin?: boolean
 }
 
 export function ReportCard({ report, isAdmin }: ReportCardProps) {
-  const [deviceId, setDeviceId] = useState<string>("");
-  const [liked, setLiked] = useState(false);
-  const [likesCount, setLikesCount] = useState(report.likes?.length || 0);
-  const [commentsCount, setCommentsCount] = useState(report.comments?.length || 0);
-  const [commentText, setCommentText] = useState("");
-  const [isCommentDialogOpen, setIsCommentDialogOpen] = useState(false);
-  const [isSubmittingComment, setIsSubmittingComment] = useState(false);
+  const [deviceId, setDeviceId] = useState<string>('')
+  const [liked, setLiked] = useState(false)
+  const [likesCount, setLikesCount] = useState(report.likes?.length || 0)
+  const [commentsCount, setCommentsCount] = useState(
+    report.comments?.length || 0
+  )
+  const [commentText, setCommentText] = useState('')
+  const [isCommentDialogOpen, setIsCommentDialogOpen] = useState(false)
+  const [isSubmittingComment, setIsSubmittingComment] = useState(false)
 
   useEffect(() => {
     // Get device ID from localStorage
-    const id = localStorage.getItem("animal_helpline_device_id");
+    const id = localStorage.getItem('animal_helpline_device_id')
     if (id) {
-      setDeviceId(id);
+      setDeviceId(id)
 
       // Check if current user has liked this report
-      const userLike = report.likes?.find((like: any) => like.user?.deviceId === id);
-      setLiked(!!userLike);
+      const userLike = report.likes?.find(
+        (like: any) => like.user?.deviceId === id
+      )
+      setLiked(!!userLike)
     }
-  }, [report.likes]);
+  }, [report.likes])
 
   const handleLike = async () => {
     if (!deviceId) {
-      toast.error("Please upload a report first to interact");
-      return;
+      toast.error('Please upload a report first to interact')
+      return
     }
 
     // Optimistic update
-    const newLiked = !liked;
-    setLiked(newLiked);
-    setLikesCount(newLiked ? likesCount + 1 : likesCount - 1);
+    const newLiked = !liked
+    setLiked(newLiked)
+    setLikesCount(newLiked ? likesCount + 1 : likesCount - 1)
 
     try {
       const res = await fetch(`/api/reports/${report.id}/like`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ deviceId }),
-      });
+      })
 
-      if (!res.ok) throw new Error("Failed to toggle like");
+      if (!res.ok) throw new Error('Failed to toggle like')
 
-      const data = await res.json();
-      toast.success(data.liked ? "Liked!" : "Like removed");
+      const data = await res.json()
+      toast.success(data.liked ? 'Liked!' : 'Like removed')
     } catch (error) {
       // Revert on error
-      setLiked(!newLiked);
-      setLikesCount(newLiked ? likesCount : likesCount + 1);
-      toast.error("Failed to update like");
+      setLiked(!newLiked)
+      setLikesCount(newLiked ? likesCount : likesCount + 1)
+      toast.error('Failed to update like')
     }
-  };
+  }
 
   const handleCommentSubmit = async () => {
     if (!commentText.trim()) {
-      toast.error("Please enter a comment");
-      return;
+      toast.error('Please enter a comment')
+      return
     }
 
     if (!deviceId) {
-      toast.error("Please upload a report first to comment");
-      return;
+      toast.error('Please upload a report first to comment')
+      return
     }
 
-    setIsSubmittingComment(true);
+    setIsSubmittingComment(true)
 
     try {
       const res = await fetch(`/api/reports/${report.id}/comment`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ deviceId, text: commentText }),
-      });
+      })
 
-      if (!res.ok) throw new Error("Failed to post comment");
+      if (!res.ok) throw new Error('Failed to post comment')
 
-      toast.success("Comment posted successfully!");
-      setCommentText("");
-      setIsCommentDialogOpen(false);
-      setCommentsCount(commentsCount + 1);
+      toast.success('Comment posted successfully!')
+      setCommentText('')
+      setIsCommentDialogOpen(false)
+      setCommentsCount(commentsCount + 1)
     } catch (error) {
-      toast.error("Failed to post comment");
+      toast.error('Failed to post comment')
     } finally {
-      setIsSubmittingComment(false);
+      setIsSubmittingComment(false)
     }
-  };
+  }
 
   const handleDonate = () => {
-    toast.success("Donation request sent to Admin!", {
-      description: `Your support request for this ${report.analysisResult?.animalType || "animal"} has been forwarded to the admin team.`,
+    toast.success('Donation request sent to Admin!', {
+      description: `Your support request for this ${
+        report.analysisResult?.animalType || 'animal'
+      } has been forwarded to the admin team.`,
       duration: 4000,
-    });
-  };
+    })
+  }
 
-  const isInjured = report.analysisResult?.isInjured;
-  const severity = report.analysisResult?.injuryDetails?.severity;
+  const isInjured = report.analysisResult?.isInjured
+  const severity = report.analysisResult?.injuryDetails?.severity
+
+  // Safely handle createdAt / reportedAt dates to avoid "Invalid time value" during prerender
+  let createdDate: Date | null = null
+  if (report?.createdAt) {
+    const d = new Date(report.createdAt)
+    if (!isNaN(d.getTime())) createdDate = d
+  } else if (report?.reportedAt) {
+    const d = new Date(report.reportedAt)
+    if (!isNaN(d.getTime())) createdDate = d
+  }
 
   return (
     <Card className="overflow-hidden hover:shadow-lg transition-shadow">
@@ -125,7 +151,10 @@ export function ReportCard({ report, isAdmin }: ReportCardProps) {
           className="object-cover w-full h-full"
         />
         {isInjured && (
-          <Badge variant="destructive" className="absolute top-3 right-3 shadow-md">
+          <Badge
+            variant="destructive"
+            className="absolute top-3 right-3 shadow-md"
+          >
             🚨 Injured
           </Badge>
         )}
@@ -135,15 +164,23 @@ export function ReportCard({ report, isAdmin }: ReportCardProps) {
         <div className="flex justify-between items-start gap-2">
           <div className="flex-1">
             <h3 className="font-bold text-xl capitalize">
-              {report.analysisResult?.animalType || "Unknown Animal"}
+              {report.analysisResult?.animalType || 'Unknown Animal'}
             </h3>
-            <p className="text-sm text-muted-foreground mt-1">
-              {formatDistanceToNow(new Date(report.createdAt), { addSuffix: true })}
-            </p>
+            {createdDate && (
+              <p className="text-sm text-muted-foreground mt-1">
+                {formatDistanceToNow(createdDate, { addSuffix: true })}
+              </p>
+            )}
           </div>
           {severity && (
             <Badge
-              variant={severity === "critical" ? "destructive" : severity === "medium" ? "default" : "secondary"}
+              variant={
+                severity === 'critical'
+                  ? 'destructive'
+                  : severity === 'medium'
+                  ? 'default'
+                  : 'secondary'
+              }
               className="capitalize"
             >
               {severity}
@@ -156,8 +193,14 @@ export function ReportCard({ report, isAdmin }: ReportCardProps) {
         {isInjured && (
           <div className="text-sm bg-red-50 dark:bg-red-950 text-red-900 dark:text-red-100 p-3 rounded-lg border border-red-200 dark:border-red-800">
             <p className="font-semibold mb-1">⚠️ Injury Details:</p>
-            <p><strong>Condition:</strong> {report.analysisResult?.injuryDetails?.condition}</p>
-            <p><strong>Environment:</strong> {report.analysisResult?.environment?.description}</p>
+            <p>
+              <strong>Condition:</strong>{' '}
+              {report.analysisResult?.injuryDetails?.condition}
+            </p>
+            <p>
+              <strong>Environment:</strong>{' '}
+              {report.analysisResult?.environment?.description}
+            </p>
           </div>
         )}
 
@@ -170,7 +213,7 @@ export function ReportCard({ report, isAdmin }: ReportCardProps) {
             <MapView
               lat={report.latitude}
               lng={report.longitude}
-              popupText={report.location || "Report Location"}
+              popupText={report.location || 'Report Location'}
             />
           </div>
         )}
@@ -184,11 +227,16 @@ export function ReportCard({ report, isAdmin }: ReportCardProps) {
             className="gap-1.5"
             onClick={handleLike}
           >
-            <Heart className={`h-4 w-4 ${liked ? "fill-red-500 text-red-500" : ""}`} />
+            <Heart
+              className={`h-4 w-4 ${liked ? 'fill-red-500 text-red-500' : ''}`}
+            />
             <span className="font-medium">{likesCount}</span>
           </Button>
 
-          <Dialog open={isCommentDialogOpen} onOpenChange={setIsCommentDialogOpen}>
+          <Dialog
+            open={isCommentDialogOpen}
+            onOpenChange={setIsCommentDialogOpen}
+          >
             <DialogTrigger asChild>
               <Button variant="ghost" size="sm" className="gap-1.5">
                 <MessageCircle className="h-4 w-4" />
@@ -199,7 +247,8 @@ export function ReportCard({ report, isAdmin }: ReportCardProps) {
               <DialogHeader>
                 <DialogTitle>Add Comment</DialogTitle>
                 <DialogDescription>
-                  Share your thoughts or offer support for this {report.analysisResult?.animalType || "animal"}.
+                  Share your thoughts or offer support for this{' '}
+                  {report.analysisResult?.animalType || 'animal'}.
                 </DialogDescription>
               </DialogHeader>
               <div className="space-y-4 py-4">
@@ -253,5 +302,5 @@ export function ReportCard({ report, isAdmin }: ReportCardProps) {
         )}
       </CardFooter>
     </Card>
-  );
+  )
 }

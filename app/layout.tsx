@@ -4,6 +4,7 @@ import { GeistSans } from 'geist/font/sans'
 import { GeistMono } from 'geist/font/mono'
 import { Suspense } from 'react'
 import { PwaInstallBar } from '@/components/pwa-install-bar'
+import { SideNav } from '@/components/side-nav'
 import './globals.css'
 
 export const metadata: Metadata = {
@@ -52,6 +53,7 @@ export default function RootLayout({
       <body className={`font-sans ${GeistSans.variable} ${GeistMono.variable}`}>
         <Suspense fallback={<AppLoading />}>{children}</Suspense>
         <PwaInstallBar />
+        <SideNav />
       </body>
     </html>
   )

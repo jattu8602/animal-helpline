@@ -50,26 +50,64 @@ export function SideNav() {
 
   // Only show on medium+ screens
   return (
-    <div className="pointer-events-none fixed left-[4%] top-1/2 z-40 hidden -translate-y-1/2 md:flex">
-      <nav className="pointer-events-auto flex min-h-[500px] flex-col items-center gap-8 rounded-full bg-card/90 px-3 py-10 shadow-lg backdrop-blur">
-        {/* Logo */}
-        <div className="mb-2 rounded-full bg-background p-1 shadow-sm">
-          <div className="relative h-10 w-10">
-            <Image
-              src="/logo.png"
-              alt="Animal Helpline logo"
-              fill
-              className="rounded-full object-contain"
-            />
+    <>
+      {/* Desktop Nav */}
+      <div className="pointer-events-none fixed left-[4%] top-1/2 z-40 hidden -translate-y-1/2 md:flex">
+        <nav className="pointer-events-auto flex min-h-[500px] flex-col items-center gap-8 rounded-full bg-card/90 px-3 py-10 shadow-lg backdrop-blur">
+          {/* Logo */}
+          <div className="mb-2 rounded-full bg-background p-1 shadow-sm">
+            <div className="relative h-10 w-10">
+              <Image
+                src="/logo.png"
+                alt="Animal Helpline logo"
+                fill
+                className="rounded-full object-contain"
+              />
+            </div>
           </div>
-        </div>
 
-        <div className="h-px w-8 bg-border" />
+          <div className="h-px w-8 bg-border" />
 
-        {/* Nav icons */}
-        <div className="flex flex-col items-center gap-6">
+          {/* Nav icons */}
+          <div className="flex flex-col items-center gap-6">
+            {navItems
+              .filter((item) => !item.adminOnly || isAdmin)
+              .map((item) => {
+                const Icon = item.icon
+                const isActive =
+                  item.href === '/'
+                    ? pathname === '/'
+                    : pathname.startsWith(item.href)
+
+                return (
+                  <Tooltip key={item.href}>
+                    <TooltipTrigger asChild>
+                      <Link
+                        href={item.href}
+                        className={`flex h-10 w-10 items-center justify-center rounded-full transition-colors ${
+                          isActive
+                            ? 'bg-primary text-primary-foreground'
+                            : 'text-muted-foreground hover:bg-accent hover:text-accent-foreground'
+                        }`}
+                      >
+                        <Icon className="h-5 w-5" />
+                      </Link>
+                    </TooltipTrigger>
+                    <TooltipContent side="right" sideOffset={8}>
+                      {item.label}
+                    </TooltipContent>
+                  </Tooltip>
+                )
+              })}
+          </div>
+        </nav>
+      </div>
+
+      {/* Mobile Bottom Nav */}
+      <div className="fixed bottom-0 left-0 right-0 z-50 border-t bg-background/80 backdrop-blur md:hidden">
+        <nav className="flex h-16 items-center justify-around px-4">
           {navItems
-            .filter((item) => !item.adminOnly || isAdmin)
+            .filter((item) => !item.adminOnly) // Always hide admin on mobile
             .map((item) => {
               const Icon = item.icon
               const isActive =
@@ -78,29 +116,30 @@ export function SideNav() {
                   : pathname.startsWith(item.href)
 
               return (
-                <Tooltip key={item.href}>
-                  <TooltipTrigger asChild>
-                    <Link
-                      href={item.href}
-                      className={`flex h-10 w-10 items-center justify-center rounded-full transition-colors ${
-                        isActive
-                          ? 'bg-primary text-primary-foreground'
-                          : 'text-muted-foreground hover:bg-accent hover:text-accent-foreground'
-                      }`}
-                    >
-                      <Icon className="h-5 w-5" />
-                    </Link>
-                  </TooltipTrigger>
-                  <TooltipContent side="right" sideOffset={8}>
-                    {item.label}
-                  </TooltipContent>
-                </Tooltip>
+                <Link
+                  key={item.href}
+                  href={item.href}
+                  className={`flex flex-col items-center justify-center gap-1 rounded-lg p-2 transition-colors ${
+                    isActive
+                      ? 'text-primary'
+                      : 'text-muted-foreground hover:text-foreground'
+                  }`}
+                >
+                  <Icon className="h-6 w-6" />
+                  <span className="text-[10px] font-medium">{item.label}</span>
+                </Link>
               )
             })}
-        </div>
-      </nav>
-    </div>
+        </nav>
+      </div>
+    </>
   )
 }
+
+
+
+
+
+
 
 

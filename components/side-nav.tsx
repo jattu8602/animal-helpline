@@ -52,7 +52,7 @@ export function SideNav() {
   return (
     <>
       {/* Desktop Nav */}
-      <div className="pointer-events-none fixed left-[4%] top-1/2 z-40 hidden -translate-y-1/2 md:flex">
+      <div className="pointer-events-none fixed left-[4%] top-1/2 z-[1000] hidden -translate-y-1/2 md:flex">
         <nav className="pointer-events-auto flex min-h-[500px] flex-col items-center gap-8 rounded-full bg-card/90 px-3 py-10 shadow-lg backdrop-blur">
           {/* Logo */}
           <div className="mb-2 rounded-full bg-background p-1 shadow-sm">
@@ -104,7 +104,7 @@ export function SideNav() {
       </div>
 
       {/* Mobile Bottom Nav */}
-      <div className="fixed bottom-0 left-0 right-0 z-50 border-t bg-background/80 backdrop-blur md:hidden">
+      <div className="fixed bottom-0 left-0 right-0 z-[1001] border-t bg-background/80 backdrop-blur md:hidden">
         <nav className="flex h-16 items-center justify-around px-4">
           {navItems
             .filter((item) => !item.adminOnly) // Always hide admin on mobile

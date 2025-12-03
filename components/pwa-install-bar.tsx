@@ -95,7 +95,7 @@ export function PwaInstallBar() {
   if (!deferredPrompt) return null
 
   return (
-    <div className="fixed inset-x-0 bottom-0 z-50 border-t bg-background/95 backdrop-blur md:hidden">
+    <div className="fixed inset-x-0 top-0 z-50 border-t bg-background/95 backdrop-blur md:hidden">
       <div className="mx-auto flex max-w-md items-center justify-between gap-3 px-4 py-3">
         <div className="text-xs">
           <p className="font-semibold">Install Animal Helpline</p>

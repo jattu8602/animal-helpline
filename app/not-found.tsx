@@ -1,23 +1,11 @@
 import Link from 'next/link'
 import { NotFoundAnimation } from '@/components/not-found-animation'
-import fs from 'fs'
-import path from 'path'
+import { getAnimationFiles } from '@/lib/animations'
 import { ArrowLeft } from 'lucide-react'
 
 export default function NotFound() {
   // Get all json files from public/anime
-  const animeDir = path.join(process.cwd(), 'public', 'anime')
-  let animations: string[] = []
-
-  try {
-    if (fs.existsSync(animeDir)) {
-      animations = fs
-        .readdirSync(animeDir)
-        .filter((file) => file.endsWith('.json'))
-    }
-  } catch (error) {
-    console.error('Error reading anime directory:', error)
-  }
+  const animations = getAnimationFiles()
 
   return (
     <div className="h-screen w-screen flex flex-col items-center justify-center bg-[#F5F2EB] p-4 overflow-hidden">

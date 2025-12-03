@@ -87,18 +87,8 @@ export function PwaInstallBar() {
 
   // If the app is installed, show a small confirmation bar
   if (isInstalled) {
-    return (
-      <div className="fixed inset-x-0 bottom-0 z-50 border-t bg-background/95 backdrop-blur md:hidden">
-        <div className="mx-auto flex max-w-md items-center justify-between gap-3 px-4 py-3">
-          <div className="text-xs">
-            <p className="font-semibold">Animal Helpline is installed</p>
-            <p className="text-muted-foreground">
-              Open it from your home screen.
-            </p>
-          </div>
-        </div>
-      </div>
-    )
+    // Once installed, hide the bar entirely to avoid being annoying
+    return null
   }
 
   // If we don't have a deferredPrompt yet, we can't trigger install UI reliably, so hide the bar.

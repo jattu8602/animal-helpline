@@ -1,0 +1,97 @@
+CHAPTER 3
+                                            MAJOR OBJECTIVE & SCOPE OF
+                                                               PROJECT
+
+3.1. Major Objectives of the Project
+
+The primary objective of this project is to design and implement an intelligent system capable of detecting and analysing the injury status of stray animals using Machine Learning and Computer Vision techniques. The system aims to overcome the limitations of manual reporting methods by providing accurate, fast, and user-friendly assessments based on image analysis.
+
+This project focuses on developing an application that uses captured images of injured animals to assess their current condition, suggest immediate first-aid, provide safety assessments, and assist users in making informed decisions before help arrives. The objectives have been formulated keeping in mind animal welfare, public safety, and reduction of rescue response time.
+
+
+The major objectives include:
+
+    1. To classify animals and injuries based on severity level
+
+        o Implement deep learning-based classification for different types of animals and
+        injuries.
+
+        o Identify visible signs such as wounds, bleeding, fractures, and skin infections.
+
+    2. To determine the injury severity score
+
+        o Provide a measurable score indicating how critical the animal's condition currently is.
+
+    3. To estimate urgency and response priority
+
+        o Predict the urgency level to prioritize critical cases for immediate ambulance dispatch.
+
+        o Suggest immediate actions for bystanders to stabilize the animal.
+
+    4. To provide first-aid guidance and safety advice
+
+        o Display immediate first-aid steps, safety precautions, and handling instructions. o
+
+        Offer safety assessments of the environment (e.g., traffic, aggression). To integrate heatmap
+
+    5. visualization for model transparency
+
+        o Show users which regions of the image influenced the injury prediction.
+
+        o Build trust by making AI decisions explainable.
+
+    6. To develop a user-friendly interface for reporting
+
+        o Allow real-time scanning and reporting using smartphones/cameras.
+
+        o Provide results instantly with a simple and clean design.
+
+    7. To reduce animal mortality and enhance community awareness
+
+        o Encourage responsible citizenship in reporting and aiding distressed animals.
+
+    8. To support shelters, rescuers, and NGOs
+
+        o Help maintain rescue logs and improve resource allocation.
+
+
+These objectives align with sustainable development goals related to animal welfare, public safety, and community health improvement.
+
+
+3.2. Scope of the Project
+
+The scope defines the boundaries, functionality, and potential applications of the proposed system. This project’s scope is designed to ensure practical feasibility and wide usability across different audiences such as general public, animal rescuers, and shelter staff.
+
+Project Scope Includes:
+
+    •   Animal & Injury Classification
+
+        o Identification of multiple types of stray animals (dogs, cats, cattle).
+
+        o Categorization into various injury severity levels using visual parameters.
+
+    • Image Processing and ML-based Prediction
+
+        o Multimodal Large Language Model (GPT-4o) for analysing visual features.
+
+        o Pre-trained on vast datasets to recognize injuries without custom training.
+
+    •   Urgency & Triage Analysis
+
+        o Provides prediction of urgency to categorize cases as Critical, Moderate, or Low.
+
+        o Helps rescuers prioritize ambulance dispatch for life-threatening cases.
+
+    • First-Aid Information Module
+
+        o Displays immediate care instructions to stabilize the animal until help arrives.
+
+    •   Explainable AI (XAI) Integration
+
+        o Heatmaps showing decision-influencing features for transparency and reliability.
+
+    • Mobile and Web Integration
+
+        o Can be developed as a mobile app or web platform for ease of access.
+
+        o Suitable for roadside emergencies and shelter management environments.

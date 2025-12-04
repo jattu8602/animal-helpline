@@ -1,0 +1,62 @@
+para1
+
+Automatic detection of injuries and distress in stray animals has evolved into a major research focus due to rising concerns about animal welfare, increasing urban wildlife conflicts, and the urgent need for rapid response in rescue operations. Stray animals are highly vulnerable creatures whose health deteriorates rapidly due to traffic accidents, human abuse, malnutrition, and untreated diseases. Traditionally, rescuers and shelters have relied on manual reporting methods such as phone calls, social media tags, or verbal descriptions to assess emergencies. However, these human-centred approaches are subjective, non-standardized, and prone to miscommunication regarding location and severity. In response, computer vision and machine learning techniques have become powerful tools for developing automated, objective, and scalable systems for animal triage.
+
+
+para2
+
+Early research efforts primarily relied on classical image-processing techniques and traditional machine-learning algorithms. Researchers extracted hand-crafted features such as fur color histograms, texture descriptors (e.g., GLCM), shape attributes, and edge patterns to identify animals. These features were then fed into machine-learning classifiers like Support Vector Machines (SVM), k-Nearest Neighbors (k-NN), and Decision Trees for sorting animals into different species categories. Although these techniques achieved acceptable results under controlled conditions, they suffered from significant limitations when applied in uncontrolled, real-world environments. Variations in illumination, camera distance, background clutter, occlusion, and natural variability within breeds often resulted in inconsistent outputs. In particular, traditional feature-based methods struggled to detect subtle, early-stage injury indicators such as minor wounds, slight limping postures, or skin infections. This lack of robustness created a need for more flexible and adaptive systems.
+
+
+para3
+
+The introduction of deep learning, especially Convolutional Neural Networks (CNNs), significantly transformed the field by enabling computers to automatically learn hierarchical visual features without manual feature engineering. CNNs excel at capturing complex patterns such as wound textures, bleeding patterns, abnormal postures, and structural deformities, which are critical cues for injury detection. With the availability of transfer learning models such as VGG-16, ResNet-50, Inception-V3, MobileNet, and EfficientNet, researchers began leveraging pre-trained architectures trained on large-scale datasets to analyze animal images. These pre-trained models provided rich feature representations that greatly reduced the amount of required training data and improved generalization across different environments. As a result, deep-learning-based injury detection systems consistently outperformed classical models in terms of accuracy, robustness, and adaptability.
+
+
+para4
+
+A major development in recent literature is the shift from simple binary classification (injured vs. healthy) toward more nuanced multi-class grading systems. Many researchers classify incidents across multiple severity or urgency stages—for example: healthy, minor injury, major fracture, critical condition, and contagious disease. Such multi-class grading is extremely valuable for shelter management, ambulance dispatch, and resource allocation, where knowing the precise level of urgency can help save lives and optimize limited resources. For instance, skin diseases transition through multiple visual stages, and identifying the exact severity is crucial for isolation protocols. Similarly, fractures, open wounds, and internal trauma exhibit complex patterns of distress that require multi-stage analysis for accurate assessment. Multi-label deep learning models have been proposed that combine species identification with simultaneous evaluation of injury levels, allowing a single system to perform multiple triage checks at once.
+
+
+para5
+
+Another promising direction in recent studies is the development of hybrid and multi-task deep learning systems. These models integrate CNNs with other machine learning techniques—such as Recurrent Neural Networks (RNNs) for video analysis, or object detection frameworks—to improve precision and context. Hybrid approaches are beneficial in capturing behavioral patterns in movement or associating multiple dependent outputs such as breed detection, injury localization, and safety assessment. Some systems incorporate object detection models such as YOLO or Faster R-CNN to locate specific wounded regions in cluttered street scenes before applying severity classification, making them suitable for busy urban environments where multiple objects appear in the same frame. These innovations represent an important advancement toward deploying rescue systems in realistic, uncontrolled settings.
+
+
+para6
+
+Explainable AI (XAI) has become increasingly important in this domain as well. Modern systems incorporate techniques such as Grad-CAM, Class Activation Mapping (CAM), and saliency maps to visualize the regions of an image that influence the model’s decision. Heatmaps generated through these methods highlight specific portions of the animal, such as bleeding limbs, mange patches, or swollen areas. This provides deeper insight into the model’s internal reasoning, helping veterinarians diagnose errors and allowing rescuers to trust the predictions. Transparency is particularly important in emergency applications, where users may hesitate to rely solely on automated decisions regarding the life and safety of a living being.
+
+
+para7
+
+Despite the significant progress in deep-learning-based rescue analysis, several limitations persist in existing research. Many models are still trained and evaluated on datasets collected under controlled conditions with clear visibility, uniform backgrounds, and minimal noise. Such environments do not reflect the conditions encountered in real streets, drains, or highways. As a result, models that perform well in academic settings may struggle in practical usage. Additionally, datasets used in most studies lack diversity in terms of animal species, injury types, lighting conditions, and camera angles. Many research datasets include only common pets like dogs and cats, leaving a large variety of stray cattle, birds, and other urban wildlife unrepresented.
+
+
+para8
+
+Another major gap in current research is the absence of actionable first-aid guidance. While many papers focus on classifying injuries, they rarely attempt to predict the immediate steps a bystander should take while waiting for help (e.g., 'apply pressure' or 'do not move'). Triage estimation requires modeling both visual injury patterns and situational factors—a far more complex challenge. Shelter connectivity is also largely absent from existing detection systems. Users not only want to know if the animal is injured, but also which shelter is nearest, whether they have capacity, and how to contact them. Without such information, injury detection systems remain incomplete from a rescue perspective.
+
+
+para9
+
+Furthermore, many existing models are computationally heavy and require powerful GPUs for inference, making them unsuitable for deployment on mobile devices or low-resource hardware. Real-world applications—such as scanning an injured animal on a roadside using a smartphone—require lightweight, optimized models capable of delivering instant predictions. This challenge remains largely unaddressed in academic literature.
+
+
+para10
+
+In contrast to these limitations, the proposed system introduces several advancements that directly address the shortcomings found in prior studies. By utilizing a Multimodal Large Language Model (GPT-4o), it offers a more intuitive and reasoning-based output than discrete class labels. The inclusion of immediate first-aid recommendations—tailored to the specific injury—adds a practical dimension that is highly valuable for bystanders, rescuers, and shelter staff. The integration of geolocation and direct shelter connectivity further enhances the system’s real-world utility by supporting rapid response coordination. Moreover, the system leverages the model's inherent reasoning capabilities to justify assessments, bridging the gap between accuracy and interpretability. By combining deep-learning analysis, explainable reasoning, location intelligence, and shelter networking, the system achieves a level of completeness not commonly found in prior research. The result is a highly practical, real-world-ready solution suitable for public use, rescue teams, and animal welfare monitoring applications.
+
+
+
+
+
+
+
+
+
+
+
+
+
+

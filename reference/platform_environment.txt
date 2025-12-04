@@ -1,0 +1,75 @@
+CHAPTER 6
+                                            HARDWARE/SOFTWARE
+                                         PLATFORM ENVIRONMENT
+
+6.1 Hardware Requirements
+
+To efficiently run and test the proposed AI-based Animal Injury Detection System, the following hardware environment is recommended:
+
+User / Development System
+
+    •   Processor: Intel Core i5/AMD Ryzen 5 or higher (for development); Any modern smartphone processor (for end-user).
+
+    •   RAM: Minimum 8 GB (16GB recommended for smooth development workflow).
+
+    •   Storage: Minimum 256GB SSD (for project files and local database).
+
+    •   Graphics:
+
+        o Integrated GPU supported system (sufficient for web development).
+
+        o Discrete GPU not strictly required as AI inference is cloud-based (OpenAI).
+
+    •   Camera:
+
+        o Smartphone Camera (8 MP or higher) for capturing clear injury photos.
+
+        o Web Camera / USB Camera for testing web interface on desktop.
+
+    •   Display: 1080p or higher resolution screen.
+
+    •   Other Accessories: Stable Wi-Fi/4G connectivity (crucial for API calls), Mouse/Keyboard.
+
+
+6.2 Software Requirements
+
+The proposed system integrates various software components for frontend interface, backend logic, and AI model integration.
+
+    Operating System:
+
+    •   Windows 10 / 11, macOS, or Linux (development environment).
+
+    •   Android OS / iOS / Web Browser (end-user environment).
+
+    Programming Languages:
+
+    •   TypeScript 5.0+ (for type-safe Application Logic).
+
+    •   JavaScript / Node.js 18+ (Runtime Environment).
+
+    Software Tools & Libraries:
+
+    •   VS Code – Integrated Development Environment (IDE).
+
+    •   Next.js 15 – React Framework for Production.
+
+    •   OpenAI SDK – For communicating with GPT-4o model.
+
+    •   Prisma ORM – For database management and schema validation.
+
+    •   Tailwind CSS – For responsive and modern UI styling.
+
+    •   Leaflet / React-Leaflet – For map and geolocation services.
+
+
+6.3 Application Development Platforms
+
+Depending on how the system is delivered to users, various application platforms are utilized:
+
+    •   Web Browser (PWA): The system is built as a Progressive Web App, allowing users to access it via Chrome, Safari, or Edge on any device without installation.
+
+    •   Vercel: For deploying the Next.js application as a serverless cloud function, ensuring high availability and scalability.
+
+    •   PostgreSQL Database: Hosted on a cloud provider (e.g., Neon or Supabase) for persistent data storage.
+
+    •   GitHub: Used for source code management, project documentation, issue tracking, and collaborative development among team members. It ensures version control, making the project scalable and easier to maintain or update in future enhancements.

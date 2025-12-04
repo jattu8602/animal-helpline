@@ -20,20 +20,20 @@ graph TD
     System((("Animal Shelter<br/>Helpline System")))
 
     %% Flows
-    User -->|1. Submit Report (Image, Loc)| System
-    System -->|2. First Aid Advice| User
+    User -->|"1. Submit Report (Image, Loc)"| System
+    System -->|"2. First Aid Advice"| User
 
-    System -->|3. Emergency Notification| Shelter
-    Shelter -->|4. Update Rescue Status| System
+    System -->|"3. Emergency Notification"| Shelter
+    Shelter -->|"4. Update Rescue Status"| System
 
-    Admin -->|5. Manage Shelters| System
-    System -->|6. Analytics Dashboard| Admin
+    Admin -->|"5. Manage Shelters"| System
+    System -->|"6. Analytics Dashboard"| Admin
 
     %% Styling
-    style System fill:#ff9900,stroke:#333,stroke-width:4px,color:white
-    style User fill:#00ccff,stroke:#333,stroke-width:2px
-    style Shelter fill:#00ccff,stroke:#333,stroke-width:2px
-    style Admin fill:#00ccff,stroke:#333,stroke-width:2px
+    style System fill:#ff9900,stroke:#333,stroke-width:4px,color:black
+    style User fill:#87CEEB,stroke:#333,stroke-width:2px,color:black
+    style Shelter fill:#87CEEB,stroke:#333,stroke-width:2px,color:black
+    style Admin fill:#87CEEB,stroke:#333,stroke-width:2px,color:black
 ```
 
 ---
@@ -75,9 +75,10 @@ graph LR
     P3 -->|Update Status| D1
 
     %% Styling
-    classDef process fill:#ffcc00,stroke:#333,stroke-width:2px;
-    classDef store fill:#99ff99,stroke:#333,stroke-width:2px;
-    classDef entity fill:#00ccff,stroke:#333,stroke-width:2px;
+    %% Styling
+    classDef process fill:#FFD700,stroke:#333,stroke-width:2px,color:black;
+    classDef store fill:#90EE90,stroke:#333,stroke-width:2px,color:black;
+    classDef entity fill:#87CEEB,stroke:#333,stroke-width:2px,color:black;
 
     class P1,P2,P3,P4 process
     class D1,D2,D3 store
@@ -97,11 +98,11 @@ graph TD
     AI_Service[("AI Service")]
 
     %% Sub-Processes
-    P1_1(("1.1<br/>Capture<br/>Image"))
-    P1_2(("1.2<br/>Validate<br/>Location"))
-    P1_3(("1.3<br/>Upload<br/>Media"))
-    P1_4(("1.4<br/>Generate<br/>Triage"))
-    P1_5(("1.5<br/>Store<br/>Record"))
+    P1_1(("1.1 Capture<br/>Image"))
+    P1_2(("1.2 Validate<br/>Location"))
+    P1_3(("1.3 Upload<br/>Media"))
+    P1_4(("1.4 Generate<br/>Triage"))
+    P1_5(("1.5 Store<br/>Record"))
 
     %% Data Stores
     D1[("D1: Reports")]
@@ -124,9 +125,10 @@ graph TD
     P1_5 -->|Complete Record| D1
 
     %% Styling
-    classDef subproc fill:#ff99cc,stroke:#333,stroke-width:2px;
-    classDef store fill:#99ff99,stroke:#333,stroke-width:2px;
-    classDef ext fill:#cccccc,stroke:#333,stroke-width:2px;
+    %% Styling
+    classDef subproc fill:#FFB6C1,stroke:#333,stroke-width:2px,color:black;
+    classDef store fill:#90EE90,stroke:#333,stroke-width:2px,color:black;
+    classDef ext fill:#D3D3D3,stroke:#333,stroke-width:2px,color:black;
 
     class P1_1,P1_2,P1_3,P1_4,P1_5 subproc
     class D1,D4 store

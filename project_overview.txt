@@ -1,0 +1,67 @@
+PROJECT OVERVIEW: ANIMAL SHELTER HELPLINE
+=========================================
+
+INTRODUCTION
+------------
+This project is a comprehensive web-based platform designed to revolutionize animal rescue efforts. It serves as a critical bridge between compassionate citizens who find distressed animals and the network of shelters, fosters, and emergency services that can help them.
+
+The core mission is to streamline the reporting process for injured animals, ensuring that accurate, actionable data (location, injury severity, photos) reaches the right people instantly. By leveraging modern web technologies and Artificial Intelligence, we aim to reduce response times and save more lives.
+
+KEY FEATURES
+------------
+- **Emergency Reporting System**: A streamlined flow for users to report injured animals quickly.
+- **AI-Powered Triage**: Automatic analysis of uploaded photos to assess injury severity and animal type.
+- **Location Intelligence**: Precise location pinning to guide rescue teams.
+- **Shelter Directory**: A connected network of nearby shelters and care providers.
+- **Progressive Web App (PWA)**: Installable on mobile devices for offline-capable, app-like access in emergencies.
+
+--------------------------------------------------------------------------------
+
+TECHNOLOGY STACK
+----------------
+We utilize a cutting-edge, high-performance stack designed for speed, reliability, and scale.
+
+**Core Framework**
+- **Next.js 15 (App Router)**: For a robust, server-rendered React application structure.
+- **TypeScript**: Ensuring code reliability and type safety across the full stack.
+- **React 19**: Leveraging the latest features for building interactive UIs.
+
+**UI & UX**
+- **Tailwind CSS v4**: For rapid, utility-first styling.
+- **Radix UI & Shadcn/ui**: For accessible, high-quality UI components.
+- **Framer Motion**: For fluid, natural animations.
+- **Lucide React**: For a consistent and clean icon system.
+
+**Backend & Data**
+- **Prisma ORM**: For type-safe database interactions.
+- **PostgreSQL (Implied)**: Robust relational database for storing reports and shelter data.
+- **Cloudinary**: For optimized image storage and delivery.
+
+--------------------------------------------------------------------------------
+
+*** SPOTLIGHT: AI IMAGE DETECTION ***
+-------------------------------------
+A standout feature of this platform is its intelligent "AI Triage" system, which assists users and rescuers in real-time.
+
+**1. THE MODEL**
+We utilize **OpenAI's GPT-4o (Omni)**. This is a state-of-the-art multimodal model capable of understanding and reasoning across both text and images with near-human levels of perception. Unlike older models that only processed text, GPT-4o can "see" and analyze visual inputs directly.
+
+**2. HOW IT WORKS**
+The process is seamless and automated:
+   a. **Capture**: The user takes a photo of the injured animal through the app.
+   b. **Processing**: The image is securely sent to our secure API endpoint (`/api/analyze`).
+   c. **Analysis**: We forward the image to GPT-4o along with a specialized "System Prompt" designed by veterinary and rescue experts.
+   d. **Structured Output**: The AI returns a structured JSON data object containing:
+      - **Animal Identification**: Detects species (e.g., "Dog", "Cat", "Cow").
+      - **Injury Assessment**: Analyzes visual signs of trauma (e.g., "bleeding", "limping", "mange").
+      - **Severity Scoring**: Assigns a priority level (Low, Medium, High, Critical).
+      - **Environment Analysis**: Identifies surroundings (e.g., "busy highway", "open drain") to assess safety risks.
+      - **Immediate Recommendations**: Provides first-aid or safety advice to the user immediately.
+
+**3. TRAINING DATA & CAPABILITIES**
+- **Scale**: GPT-4o is trained on an internet-scale dataset comprising trillions of words and hundreds of millions of images. This includes vast amounts of veterinary medical imagery, animal biology data, and real-world rescue scenarios.
+- **Zero-Shot Learning**: Because of this massive training set, we do not need to manually train the model on thousands of our own images. It already "knows" what a fractured leg looks like or how to identify a specific breed of dog.
+- **Contextual Understanding**: Unlike simple classification models that might just say "Dog: 99%", this model understands *context*. It can tell the difference between a dog sleeping peacefully and a dog lying unconscious in distress based on subtle visual cues and body language.
+
+**4. WHY THIS MATTERS**
+This technology allows even untrained bystanders to provide professional-grade reports. It helps shelters prioritize cases—ensuring that a critical "hit-and-run" case gets attention before a minor "skin infection" case—optimizing limited rescue resources.

@@ -52,8 +52,25 @@ export function PhotoUpload() {
                     console.error("Error getting location:", err);
                     // Don't set error immediately on mount, only when action is taken
                     if (showLocationDialog) {
-                         setLocationError("Could not get location. Please enable location services.");
+                        let errorMessage = "Could not get location. Please enable location services.";
+                        switch (err.code) {
+                            case err.PERMISSION_DENIED:
+                                errorMessage = "Location permission denied. Please enable it in your browser settings.";
+                                break;
+                            case err.POSITION_UNAVAILABLE:
+                                errorMessage = "Location information is unavailable.";
+                                break;
+                            case err.TIMEOUT:
+                                errorMessage = "The request to get user location timed out.";
+                                break;
+                        }
+                        setLocationError(errorMessage);
                     }
+                },
+                {
+                    enableHighAccuracy: true,
+                    timeout: 10000,
+                    maximumAge: 0
                 }
             );
         } else {

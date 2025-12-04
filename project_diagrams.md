@@ -68,7 +68,7 @@ flowchart TD
     Capture --> Upload[Upload to Server]
 
     subgraph "Backend Processing"
-        Upload --> AI_Analysis[AI Analysis (GPT-4o)]
+        Upload --> AI_Analysis["AI Analysis (GPT-4o)"]
         AI_Analysis -->|Identify Animal| Tag1[Tag Species]
         AI_Analysis -->|Assess Injury| Tag2[Tag Severity]
         AI_Analysis -->|Check Environment| Tag3[Safety Check]
@@ -128,36 +128,39 @@ sequenceDiagram
 This diagram identifies the actors and their interactions with the system.
 
 ```mermaid
-usecaseDiagram
-    actor "Public User" as User
-    actor "Shelter Admin" as Admin
-    actor "System AI" as AI
+graph LR
+    subgraph "Actors"
+        User((Public User))
+        Admin((Shelter Admin))
+        AI((System AI))
+    end
 
-    package "Animal Shelter Helpline" {
-        usecase "Report Injured Animal" as UC1
-        usecase "Upload Photo" as UC2
-        usecase "Share Location" as UC3
-        usecase "View Nearby Shelters" as UC4
+    subgraph "Animal Shelter Helpline System"
+        UC1[Report Injured Animal]
+        UC2[Upload Photo]
+        UC3[Share Location]
+        UC4[View Nearby Shelters]
 
-        usecase "Analyze Image" as UC5
-        usecase "Auto-Tag Severity" as UC6
+        UC5[Analyze Image]
+        UC6[Auto-Tag Severity]
 
-        usecase "Manage Reports" as UC7
-        usecase "Update Rescue Status" as UC8
-        usecase "View Dashboard" as UC9
-    }
+        UC7[Manage Reports]
+        UC8[Update Rescue Status]
+        UC9[View Dashboard]
+    end
 
+    %% Relationships
     User --> UC1
     User --> UC4
-    UC1 ..> UC2 : <<include>>
-    UC1 ..> UC3 : <<include>>
+    UC1 -.->|include| UC2
+    UC1 -.->|include| UC3
 
-    UC2 --> AI : Triggers
+    UC2 -->|Triggers| AI
     AI --> UC5
-    UC5 ..> UC6 : <<include>>
+    UC5 -.->|include| UC6
 
     Admin --> UC9
-    UC9 ..> UC7 : <<include>>
+    UC9 -.->|include| UC7
     Admin --> UC8
 ```
 

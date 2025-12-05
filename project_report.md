@@ -257,3 +257,8 @@ The "Animal Shelter Helpline" project successfully demonstrates the potential of
 3.  React Documentation. (n.d.). Retrieved from https://react.dev/
 4.  Tailwind CSS. (n.d.). Retrieved from https://tailwindcss.com/
 5.  Prisma. (n.d.). Retrieved from https://www.prisma.io/
+
+
+
+
+

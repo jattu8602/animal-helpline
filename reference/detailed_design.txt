@@ -1,0 +1,210 @@
+CHAPTER 5
+                                     DETAILED DESIGN (MODELING &
+                                                ERD/DFD)
+
+5.1 Detailed Design
+
+The detailed design phase focuses on transforming the system requirements into structured models that clearly show how data flows through the system and how information is stored and organized. For the Animal Injury Detection System, modeling is done using:
+
+    •   Data Flow Diagrams (DFD) – to represent the flow of data between processes, data stores, and external entities.
+
+    •   Entity–Relationship Diagram (ERD) – to represent the logical structure of the database, including entities, attributes, and relationships.
+
+These models help in understanding the internal working of the system before actual implementation and ensure that all functional requirements are correctly mapped to processes and data structures.
+
+5.2 System Modeling Overview
+
+The proposed system allows a user to capture or upload an image of an injured animal, after which the system:
+
+    1.  Identifies the animal type (e.g., dog, cat, cattle).
+
+    2.  Analyses its injury severity using a trained Machine Learning model (GPT-4o).
+
+    3.  Predicts the urgency and required response time (Critical, Moderate, Low).
+
+    4.  Fetches first-aid advice and nearby shelter details from a database.
+
+    5.  Generates a result report containing injury severity, urgency level, immediate first-aid steps, and shelter contact info.
+
+    6.  Optionally stores the result and report history for the user and rescue teams.
+
+To represent this behaviour, the following models are used:
+
+    •   Context Level DFD (Level 0) – overall view of the system as a single process.
+
+    •   Level 1 DFD – decomposition into core processes such as image capture, injury analysis, shelter fetch, and report generation.
+
+    •   Level 2 DFD (optional) – further detailing of the prediction process.
+
+    •   ERD – logical data model for users, reports, shelters, and injury assessments.
+
+
+5.3 Data Flow Diagrams (DFD)
+
+5.3.1 Context Level DFD (Level 0)
+
+At the context level, the entire Animal Injury Detection System is represented as a single process that interacts with external entities. The main elements are:
+
+    ➔ External Entities
+
+        o User – provides an image of the injured animal and receives the assessment report.
+
+        o Admin (optional) – manages shelter directory, user roles, and system settings.
+
+    ➔ Central Process
+
+        o Process 0: Animal Injury Detection System
+
+            ▪ Takes the input image from the user and returns:
+
+            ▪ Injury Severity Score
+
+            ▪ Urgency Level (Response Priority)
+
+            ▪ First-Aid Information
+
+            ▪ Recommendation/Shelter Details
+
+    ➔ Data Flows
+
+        o From User → Process: Image, location input (optional description)
+
+        o From Process → User: Injury report, first-aid advice, nearby shelters
+
+        o From Admin → Process: Master data updates (shelter list, safety guidelines)
+
+    ➔ Data Stores (conceptual at this level)
+
+        o D1: Reports & Injury Database
+
+        o D2: Shelter & First-Aid Database
+
+[DFD LEVEL 0 DIAGRAM WILL APPEAR HERE]
+
+FIG 5.3.1.1 : LEVEL 0 DIAGRAM
+
+
+5.3.2 Level 1 DFD
+
+Level 1 DFD decomposes the main system into more detailed processes. The key processes are:
+
+    ➔ Process 1.0 – Capture / Upload Image
+
+        o User captures or uploads an image.
+
+        o System validates format and forwards it for preprocessing.
+
+        o Data flows:
+
+            ▪ User → 1.0: Raw Image
+
+            ▪ 1.0 → 2.0: Validated Image
+
+    ➔ Process 2.0 – Preprocess Image
+
+        o Resize, normalize, enhance contrast, remove noise, etc.
+
+        o Creates a standardized input for the AI model.
+
+        o Data flows:
+
+            ▪ 2.0 → 3.0: Preprocessed Image
+
+    ➔ Process 3.0 – Predict Injury & Urgency
+
+        o Invokes the trained AI model to:
+
+            ▪ Detect animal type
+
+            ▪ Compute injury severity score / percentage
+
+            ▪ Estimate urgency (Critical/Non-Critical) using internal logic
+
+        o Data flows:
+
+            ▪ 3.0 → 4.0: Predicted animal type, injury severity, urgency level
+
+            ▪ 3.0 → D2: Store scan result details
+
+    ➔ Process 4.0 – Fetch First-Aid & Shelter Info
+
+        o Uses the injury type and location from Process 3.0 to query the database.
+
+        o Retrieves specific first-aid steps and nearby shelter contacts.
+
+        o Data flows:
+
+            ▪ 4.0 ↔ D1: Injury Type ↔ First-Aid Data / Shelter Data
+
+            ▪ 4.0 → 5.0: First-aid + Shelter details
+
+    ➔ Process 5.0 – Generate Result Report
+
+        o Combines output from Process 3.0 and 4.0.
+
+        o Optionally generates a heatmap image and explanation text.
+
+        o Returns the final report to the user interface.
+
+        o Data flows:
+
+            ▪ 5.0 → User: Final report (severity, urgency, first-aid, shelters, heatmap)
+
+            ▪ 5.0 → D2: Full report record
+
+    ➔ Data Stores in Level 1
+
+        o D1 – Shelter & First-Aid Database
+
+            ▪ Stores shelter directory, medical guidelines, safety tips.
+
+        o D2 – Reports / History
+
+            ▪ Stores user report logs including timestamp, predicted values, and optional feedback.
+
+[DFD LEVEL 1 DIAGRAM WILL APPEAR HERE]
+
+FIG 5.3.2.1 : LEVEL 1 DIAGRAM
+
+
+5.3.3 Level 2 DFD – Detailed Prediction Process (Process 3.0)
+
+Process 3.0 – Predict Injury & Urgency can be further decomposed into:
+
+    •   Process 3.1 – Feature Extraction
+
+        o Extract key features from the pre-processed image (wound patterns, bleeding, posture, skin texture).
+
+        o Internally handled by the Multimodal AI (GPT-4o) layers.
+
+    •   Process 3.2 – Animal Type Classification
+
+        o Classifies which animal is in the image (dog, cat, cow, etc.).
+
+    •   Process 3.3 – Injury Severity Scoring
+
+        o Based on visual features, computes an injury severity score (e.g., Critical, Serious, Minor).
+
+    •   Process 3.4 – Urgency Estimation
+
+        o Uses severity score + animal condition parameters to calculate:
+
+        o Response Priority (Immediate vs. Delayed)
+
+        o Recommended Action (Ambulance vs. Self-Transport)
+
+    •   Process 3.5 – Heatmap Generation (Explainability)
+
+        o Applies attention visualization (or similar method) to highlight injured regions in the image.
+
+        o Produces a heatmap overlay image for user trust.
+
+    •   Data Flows (within 3.x)
+
+        o Preprocessed image → 3.1 → 3.2 → 3.3 → 3.4
+
+        o Predicted animal type and severity score → 3.4 & 4.0
+
+        o Preprocessed image + model gradients → 3.5 → Heatmap image → 5.0
+
+[DFD LEVEL 2 DIAGRAM WILL APPEAR HERE]

@@ -224,7 +224,7 @@ export default function AdminPage() {
                 </span>
               </div>
               <h1 className="bg-gradient-to-r from-primary to-primary/60 bg-clip-text text-5xl font-bold text-transparent">
-                Maitri Dashboard
+                Admin Dashboard
               </h1>
               <p className="mt-3 max-w-2xl text-lg text-muted-foreground">
                 Manage and respond to all animal rescue reports.

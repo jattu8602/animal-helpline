@@ -1,0 +1,30 @@
+CHAPTER 10
+                                            REFERENCES
+
+[1]  S. Kumar and A. Singh, "Real-time Wounded Animal Detection using YOLOv8," IEEE Access, vol. 12, pp. 450-462, 2024. IEEE Xplore
+
+[2]  J. Chen et al., "Automated Wound Segmentation and Analysis in Animals using MobileNetV2," Journal of Veterinary Informatics, 2024. ResearchGate
+
+[3]  R. Gupta, "Comparative Analysis of CNN and SVM for Canine Injury Detection," International Journal of Computer Applications, 2023. IJCA
+
+[4]  M. Al-Fayez et al., "Smart Animal Rescue System using IoT and AI: A Review," Atlantis Press, 2023. Atlantis Press
+
+[5]  K. Sharma, "Deep Learning for Animal Health Monitoring and Behavior Analysis," Journal of Animal Science, 2023. NIH
+
+[6]  A. Patel et al., "Multimodal AI in Veterinary Medicine: Integrating Imaging and Clinical Notes," Frontiers in Veterinary Science, 2024. Frontiers
+
+[7]  "Application of Drone Technology and Thermal Imaging in Animal Rescue Operations," International Journal of Disaster Risk Reduction, 2023. ScienceDirect
+
+[8]  "IoT-based Stray Animal Monitoring and Rescue System," IEEE Internet of Things Journal, 2022. IEEE Xplore
+
+[9]  L. Zhang, "Zero-Shot Learning for Rare Animal Species and Injury Detection," CVPR Workshop on Animal Biometrics, 2023. CVF
+
+[10] "GPT-4 Technical Report: Capabilities in Medical and Biological Image Analysis," OpenAI, 2023. arXiv
+
+[11] "Dataset: Animal-10N - A large-scale dataset for animal species classification," Kaggle.com
+
+[12] "Vet-VQA: A Visual Question Answering Dataset for Veterinary Medicine," Mendeley Data, 2024.
+
+[13] "Smart City Solutions for Stray Animal Management using Cloud Computing," Springer Nature, 2023. SpringerLink
+
+[14] "Ethical Considerations in AI-driven Veterinary Diagnostics," Journal of Veterinary Ethics, 2024. Wiley Online Library

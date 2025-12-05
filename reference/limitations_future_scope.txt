@@ -1,0 +1,96 @@
+CHAPTER 9
+                                     PROJECT LIMITATIONS & FUTURE
+                                                SCOPE
+
+9.1 Project Limitations
+
+Despite the significant capabilities offered by the AI-based Animal Injury Detection System, there are certain limitations that currently restrict its performance and usability:
+
+    1.  Dataset & Model Limitations
+
+        o The model relies on the pre-trained knowledge of GPT-4o, which, while vast, is general-purpose.
+
+        o Rare local breeds or specific regional skin conditions might not be identified with 100% accuracy compared to a model fine-tuned specifically on local veterinary data.
+
+    2.  Dependence on Visual Features Only
+
+        o The current system evaluates injury severity purely based on visual cues such as wounds, bleeding, and posture.
+
+        o Internal injuries (e.g., internal bleeding, organ failure, or fractures without external signs) cannot be detected through camera images alone.
+
+    3.  Environmental Variability
+
+        o Excessive shadows, poor street lighting (nighttime), or rain can reduce prediction accuracy.
+
+        o Results may vary depending on the user's smartphone camera resolution and the distance from the animal.
+
+    4.  Generalized Urgency Estimation
+
+        o The prediction of urgency is based on visible trauma.
+
+        o It does not yet consider vital signs like heart rate, body temperature, or breathing rate, which are critical for precise medical triage.
+
+    5.  Processing Time and Connectivity Dependence
+
+        o Real-time model inference relies on cloud API calls (OpenAI), which requires a stable internet connection.
+
+        o In remote areas with poor network coverage, the response time for analysis might be delayed.
+
+    6.  No Physical Examination
+
+        o The absence of physical touch (palpation) limits the understanding of pain points or hidden fractures.
+
+    7.  User-Dependent Image Scanning
+
+        o Incorrect photography techniques (blurry images, wrong angles) by users can cause inaccurate predictions.
+
+        o Small wounds might be missed if not captured clearly in the frame.
+
+    8.  Limited Explainability for Non-Experts
+
+        o Although the AI provides a reasoning, the medical terminology used might still appear complex to non-technical or non-medical users.
+
+
+9.2 Future Scope of the Project
+
+To enhance system performance and expand its usability in real-life rescue scenarios, the following improvements can be introduced:
+
+    1.  Fine-Tuned Specialized Models
+
+        o Fine-tune the AI model specifically on a curated dataset of local stray animals and common road accident injuries to improve precision.
+
+    2.  Multi-Sensor Integration
+
+        o Incorporate technologies such as:
+
+            ▪ Thermal Imaging Cameras (to detect inflammation or body heat anomalies).
+
+            ▪ IoT Smart Collars (if deployed on community animals) to track vitals.
+
+        o This will improve internal injury detection beyond the visible surface.
+
+    3.  Integration with City Surveillance (CCTV)
+
+        o Deploy the model on city surveillance cameras to automatically detect injured animals on roads without waiting for a user report.
+
+    4.  Real-Time Ambulance Tracking
+
+        o Introduce real-time GPS tracking of rescue vans (similar to Uber/Ola) so the reporter knows exactly when help will arrive.
+
+    5.  Integration with Smart Supply Chain & Municipal Bodies
+
+        o Helps NGOs and Municipal Corporations monitor stray animal population health and plan sterilization drives effectively.
+
+    6.  Automated Adoption Matching
+
+        o Use the AI to analyze the animal's temperament from videos and match them with suitable adopters based on lifestyle compatibility.
+
+    7.  Voice and Multi-Language Support
+
+        o Better accessibility for users in rural areas and non-English speaking regions to report cases using voice commands in their local language.
+
+    8.  Real-Time Analytics & Accident Hotspot Mapping
+
+        o Centralized tracking of accident trends to identify "high-risk zones" in the city.
+
+        o Enable authorities to take preventive measures (e.g., speed bumps, signboards) in these hotspots.

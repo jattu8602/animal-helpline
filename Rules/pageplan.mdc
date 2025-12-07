@@ -1,0 +1,52 @@
+# Page design for Community screens
+
+remove current design from community and apply this new design
+
+For Desktop -
+- There is already layout  from left - 4 or 5 so we will start designing after left -5 okay
+
+5% width is already occupied
+
+now there will come 2 divs on flex  h- screen and width  is  half half  leaving little padding
+
+
+on left side container
+- here header will be there and  post will be there in scrollable manner
+- and for now do every thing here by own based on the mobile   view i provided to you 
+
+
+on right side container
+- there will be  the  full h and full w map wrt container
+- this map will do animation of zooming in and zooming out  wrt previous and current post locaiton   markers will be there
+
+
+
+
+
+
+
+
+
+
+
+
+For Mobile -
+
+this  gonna be h - screen but content will come  only in  90% screen in middle  - in top  and bottom make  - #FBF8F0 this colore bg        - in top there must come a header    in header only write the Community in left side
+
+the  90% will look like container
+
+this container on every scrool new post will appear  -
+
+every post opening will start with the map view   in fulll width till container  and h full (90% means fulll conatiner )     a marker  to the location  will zoom  (animation must look like going up from previous location of the reel and zoomin got current post location with mark - )
+
+this will happen in some seconds for every post  - then our map  will collapse  in right side  in bottom  in   5 5 % h and width wrt conatiner
+
+
+and as map will collapse   we can see the  post behind it  - so the fun part here is map box is a model here and we hare showing animatioin using it for better user experience
+
+
+now  the dog photo user can see in full width and height  wrt container   - and
+
+the post will have something like  name of animal , condtion , location , time uploaded ,points  , descripiton   and kind of this
+

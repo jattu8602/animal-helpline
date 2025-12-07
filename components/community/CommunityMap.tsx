@@ -121,8 +121,7 @@ export default function CommunityMap({
     const mobileVariants = {
         expanded: {
             position: "absolute" as const,
-            top: 0,
-            left: 0,
+            // Removed top: 0, left: 0 to avoid animating to "auto"
             right: 0,
             bottom: 0,
             width: "100%",
@@ -132,12 +131,11 @@ export default function CommunityMap({
         },
         collapsed: {
             position: "absolute" as const,
-            top: "auto",
-            left: "auto",
-            right: "0%",
-            bottom: "23%",
-            width: "100px",
-            height: "100px",
+            // Removed top: "auto", left: "auto"
+            right: "0%", // Keeps anchor at right
+            bottom: "23%", // Animates from 0 to 23%
+            width: "100px",  // Animates from 100% to 100px
+            height: "100px", // Animates from 100% to 100px
             zIndex: 40,
             borderRadius: "16px",
             boxShadow: "0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05)",

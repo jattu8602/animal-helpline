@@ -58,24 +58,10 @@ export default function CommunityFeed() {
 
     // Removed API fetch logic for now
 
-    const [mapCollapsed, setMapCollapsed] = useState(false);
-
-    // Allow mobile updates to activeReport
+    // Mobile Logic: sticky header etc.
     const handleInView = (report: any) => {
         setActiveReport(report);
     };
-
-    // Mobile: Auto-collapse map logic
-    useEffect(() => {
-        if (!isMobile) return;
-
-        setMapCollapsed(false); // Expand on new report
-        const timer = setTimeout(() => {
-            setMapCollapsed(true);
-        }, 2500);
-
-        return () => clearTimeout(timer);
-    }, [activeReport, isMobile]);
 
     if (loading) {
         return (
@@ -86,40 +72,27 @@ export default function CommunityFeed() {
     }
 
     if (isMobile) {
-        // Mobile Layout: Global Map + Snap Scroll Feed
+        // Mobile Layout: Sticky header + Snap Scroll + Per-Post Maps
         return (
-            <div className="relative h-screen overflow-hidden flex flex-col bg-[#FBF8F0]">
-                {/* Global Background Map */}
-                <div className="absolute inset-0 z-0">
-                    {activeReport && activeReport.latitude && activeReport.longitude ? (
-                        <CommunityMap
-                            lat={activeReport.latitude}
-                            lng={activeReport.longitude}
-                            popupText={activeReport.location}
-                            isMobile={true}
-                            isCollapsed={mapCollapsed}
-                        />
-                    ) : (
-                        <div className="h-full w-full bg-[#faebd7]" />
-                    )}
-                </div>
-
-                {/* Sticky Header */}
+            <div className="bg-[#FBF8F0] h-screen overflow-hidden flex flex-col">
                 <header className="sticky top-0 z-50 bg-[#FBF8F0]/95 backdrop-blur-sm border-b px-4 py-3 flex-shrink-0">
                      <h1 className="text-xl font-bold">Community</h1>
                 </header>
 
-                {/* Content Feed */}
-                <div className="flex-1 overflow-y-auto snap-y snap-mandatory [&::-webkit-scrollbar]:hidden w-full pb-20 z-10">
+                <div className="flex-1 overflow-y-auto snap-y snap-mandatory [&::-webkit-scrollbar]:hidden w-full pb-20">
                     <div className="pb-10">
-                        {reports.map((report) => (
-                            <PostCard
-                                key={report.id}
-                                report={report}
-                                isMobile={true}
-                                onInView={handleInView}
-                            />
-                        ))}
+                        {reports.map((report, index) => {
+                            const prevReport = index > 0 ? reports[index - 1] : null;
+                            return (
+                                <PostCard
+                                    key={report.id}
+                                    report={report}
+                                    isMobile={true}
+                                    prevLat={prevReport?.latitude}
+                                    prevLng={prevReport?.longitude}
+                                />
+                            );
+                        })}
                     </div>
                 </div>
             </div>

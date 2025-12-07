@@ -17,18 +17,35 @@ interface PostCardProps {
     report: any;
     isMobile: boolean;
     onInView?: (report: any) => void;
+    prevLat?: number;
+    prevLng?: number;
 }
 
-export default function PostCard({ report, isMobile, onInView }: PostCardProps) {
+export default function PostCard({ report, isMobile, onInView, prevLat, prevLng }: PostCardProps) {
     const cardRef = useRef<HTMLDivElement>(null);
+    const [mapCollapsed, setMapCollapsed] = useState(false);
     const [isImageModalOpen, setIsImageModalOpen] = useState(false);
+    const [isInView, setIsInView] = useState(false);
 
     useEffect(() => {
         const observer = new IntersectionObserver(
             ([entry]) => {
+                setIsInView(entry.isIntersecting);
+
                 if (entry.isIntersecting) {
                     // Notify parent that this card is in view
                     if (onInView) onInView(report);
+
+                    // For mobile: trigger map collapse animation after delay
+                    if (isMobile) {
+                        setMapCollapsed(false); // Reset first
+                        const timer = setTimeout(() => {
+                            setMapCollapsed(true);
+                        }, 2500);
+                        return () => clearTimeout(timer);
+                    }
+                } else {
+                    if (isMobile) setMapCollapsed(false);
                 }
             },
             { threshold: 0.6 } // Needs to be mostly visible
@@ -39,7 +56,7 @@ export default function PostCard({ report, isMobile, onInView }: PostCardProps) 
         }
 
         return () => observer.disconnect();
-    }, [onInView, report]);
+    }, [isMobile, onInView, report]);
 
     const severity = report.analysisResult?.injuryDetails?.severity;
     const isInjured = report.analysisResult?.isInjured;
@@ -148,6 +165,21 @@ export default function PostCard({ report, isMobile, onInView }: PostCardProps) 
                             </div>
                         </div>
                     </div>
+
+                    {/* Map Overlay Layer */}
+                    {report.latitude && report.longitude && (
+                        <CommunityMap
+                            lat={report.latitude}
+                            lng={report.longitude}
+                            startLat={prevLat}
+                            startLng={prevLng}
+                            isMobile={true}
+                            isCollapsed={mapCollapsed}
+                            popupText={report.location}
+                            isInView={isInView}
+                            className="pointer-events-none"
+                        />
+                    )}
                 </div>
                 <ImageModal />
             </>

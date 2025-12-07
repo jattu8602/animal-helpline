@@ -34,42 +34,86 @@ const createCustomIcon = () => {
 interface CommunityMapProps {
     lat: number;
     lng: number;
+    startLat?: number;
+    startLng?: number;
     popupText?: string;
     isMobile?: boolean;
     isCollapsed?: boolean;
+    isInView?: boolean;
     className?: string;
 }
 
-function MapUpdater({ lat, lng }: { lat: number; lng: number }) {
+function MapUpdater({ lat, lng, startLat, startLng, isInView, isCollapsed }: { lat: number; lng: number; startLat?: number; startLng?: number; isInView?: boolean; isCollapsed?: boolean }) {
     const map = useMap();
     const prevLoc = useRef<{ lat: number; lng: number } | null>(null);
+    const hasAnimated = useRef(false);
+
+    // Handle Map Resize/Collapse
+    useEffect(() => {
+        // Wait for framer-motion animation (0.8s) to finish before refreshing map size
+        const timer = setTimeout(() => {
+            map.invalidateSize();
+            // Ensure we stay centered on the marker after resize
+            map.setView([lat, lng], 17, { animate: false });
+        }, 850);
+        return () => clearTimeout(timer);
+    }, [isCollapsed, map, lat, lng]);
 
     useEffect(() => {
+        // Scenario 1: Animation from Previous Post (Cinematic Mode)
+        if (startLat && startLng) {
+            if (!hasAnimated.current) {
+                // Initialize/Hold at start location
+                map.setView([startLat, startLng], 17);
+
+                // Only start animation when in view
+                if (isInView) {
+                    hasAnimated.current = true;
+                    // Initial context pause
+                    const timer = setTimeout(() => {
+                        map.flyTo([lat, lng], 17, {
+                            duration: 2.5,
+                            easeLinearity: 0.25
+                        });
+                        prevLoc.current = { lat, lng };
+                    }, 500);
+                    return () => clearTimeout(timer);
+                }
+                return; // Wait until in view
+            }
+        }
+
+        // Scenario 2: Standard Behavior (Desktop or No Previous Location)
         if (!prevLoc.current) {
-            // First load: instant jump
-            map.setView([lat, lng], 17);
+            // First load: instant jump if no cinematic start
+             if (!startLat) {
+                map.setView([lat, lng], 17);
+            }
             prevLoc.current = { lat, lng };
             return;
         }
 
-        // Subsequent updates: Fly with animation
-        // flyTo automatically zooms out and in for distant points
+        // Scenario 3: Updates after initial load (e.g. desktop side-map updates)
+        // If we are already animated or didn't need to, fly to new prop updates
         map.flyTo([lat, lng], 17, {
-            duration: 2.0, // Slower duration to emphasize the "flight"
-            easeLinearity: 0.1
+            duration: 2.0,
+            easeLinearity: 0.25
         });
 
         prevLoc.current = { lat, lng };
-    }, [lat, lng, map]);
+    }, [lat, lng, startLat, startLng, isInView, map]);
     return null;
 }
 
 export default function CommunityMap({
     lat,
     lng,
+    startLat,
+    startLng,
     popupText,
     isMobile = false,
     isCollapsed = false,
+    isInView = true, // Default true for desktop/fallback
     className,
 }: CommunityMapProps) {
     const [customIcon, setCustomIcon] = useState<L.DivIcon | null>(null);
@@ -92,16 +136,16 @@ export default function CommunityMap({
         },
         collapsed: {
             position: "absolute" as const,
-            top: "auto",
+            top: "60px", // Just below header buttons
+            right: "12px",
             left: "auto",
-            right: "5%",
-            bottom: "5%",
-            width: "120px",
-            height: "120px",
+            bottom: "auto",
+            width: "90px", // Smaller size
+            height: "90px",
             zIndex: 40,
             borderRadius: "16px",
             boxShadow: "0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05)",
-            border: "4px solid white",
+            border: "3px solid white",
         },
     };
 
@@ -111,6 +155,7 @@ export default function CommunityMap({
             zoom={17}
             scrollWheelZoom={!isMobile}
             zoomControl={false} // Remove +/- controls
+            attributionControl={false} // Remove attribution text
             className="h-full w-full bg-[#faebd7]"
             style={{ background: "#f8f5f2" }}
         >
@@ -124,7 +169,7 @@ export default function CommunityMap({
                     {popupText && <Popup className="font-sans">{popupText}</Popup>}
                 </Marker>
             )}
-            <MapUpdater lat={lat} lng={lng} />
+            <MapUpdater lat={lat} lng={lng} startLat={startLat} startLng={startLng} isInView={isInView} isCollapsed={isCollapsed} />
         </MapContainer>
     );
 

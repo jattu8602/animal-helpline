@@ -83,6 +83,10 @@ export default function CommunityFeed() {
                     <div className="pb-10">
                         {reports.map((report, index) => {
                             const prevReport = index > 0 ? reports[index - 1] : null;
+                            const activeIndex = reports.findIndex(r => r.id === activeReport.id);
+                            // Preload current, previous 3, and next 3 maps
+                            const shouldLoadMap = Math.abs(index - activeIndex) <= 3;
+
                             return (
                                 <PostCard
                                     key={report.id}
@@ -90,6 +94,8 @@ export default function CommunityFeed() {
                                     isMobile={true}
                                     prevLat={prevReport?.latitude}
                                     prevLng={prevReport?.longitude}
+                                    shouldLoadMap={shouldLoadMap}
+                                    onInView={handleInView}
                                 />
                             );
                         })}

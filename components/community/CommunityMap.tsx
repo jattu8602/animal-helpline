@@ -43,21 +43,17 @@ interface CommunityMapProps {
     className?: string;
 }
 
-function MapUpdater({ lat, lng, startLat, startLng, isInView, isCollapsed }: { lat: number; lng: number; startLat?: number; startLng?: number; isInView?: boolean; isCollapsed?: boolean }) {
+function MapUpdater({ lat, lng, startLat, startLng, isInView }: { lat: number; lng: number; startLat?: number; startLng?: number; isInView?: boolean }) {
     const map = useMap();
     const prevLoc = useRef<{ lat: number; lng: number } | null>(null);
     const hasAnimated = useRef(false);
 
-    // Handle Map Resize/Collapse
+    // Reset animation state when card leaves view
     useEffect(() => {
-        // Wait for framer-motion animation (0.8s) to finish before refreshing map size
-        const timer = setTimeout(() => {
-            map.invalidateSize();
-            // Ensure we stay centered on the marker after resize
-            map.setView([lat, lng], 17, { animate: false });
-        }, 850);
-        return () => clearTimeout(timer);
-    }, [isCollapsed, map, lat, lng]);
+        if (!isInView) {
+            hasAnimated.current = false;
+        }
+    }, [isInView]);
 
     useEffect(() => {
         // Scenario 1: Animation from Previous Post (Cinematic Mode)
@@ -136,16 +132,16 @@ export default function CommunityMap({
         },
         collapsed: {
             position: "absolute" as const,
-            top: "60px", // Just below header buttons
-            right: "12px",
+            top: "auto",
             left: "auto",
-            bottom: "auto",
-            width: "90px", // Smaller size
-            height: "90px",
+            right: "0%",
+            bottom: "23%",
+            width: "100px",
+            height: "100px",
             zIndex: 40,
             borderRadius: "16px",
             boxShadow: "0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05)",
-            border: "3px solid white",
+            border: "4px solid white",
         },
     };
 
@@ -169,7 +165,7 @@ export default function CommunityMap({
                     {popupText && <Popup className="font-sans">{popupText}</Popup>}
                 </Marker>
             )}
-            <MapUpdater lat={lat} lng={lng} startLat={startLat} startLng={startLng} isInView={isInView} isCollapsed={isCollapsed} />
+            <MapUpdater lat={lat} lng={lng} startLat={startLat} startLng={startLng} isInView={isInView} />
         </MapContainer>
     );
 

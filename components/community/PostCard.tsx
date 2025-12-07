@@ -19,9 +19,10 @@ interface PostCardProps {
     onInView?: (report: any) => void;
     prevLat?: number;
     prevLng?: number;
+    shouldLoadMap?: boolean;
 }
 
-export default function PostCard({ report, isMobile, onInView, prevLat, prevLng }: PostCardProps) {
+export default function PostCard({ report, isMobile, onInView, prevLat, prevLng, shouldLoadMap = true }: PostCardProps) {
     const cardRef = useRef<HTMLDivElement>(null);
     const [mapCollapsed, setMapCollapsed] = useState(false);
     const [isImageModalOpen, setIsImageModalOpen] = useState(false);
@@ -167,7 +168,7 @@ export default function PostCard({ report, isMobile, onInView, prevLat, prevLng 
                     </div>
 
                     {/* Map Overlay Layer */}
-                    {report.latitude && report.longitude && (
+                    {shouldLoadMap && report.latitude && report.longitude && (
                         <CommunityMap
                             lat={report.latitude}
                             lng={report.longitude}

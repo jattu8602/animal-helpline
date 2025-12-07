@@ -15,6 +15,8 @@ Analyze the image and provide a JSON response with the following structure:
     "description": string, // describe the surroundings e.g., "busy road", "park", "drain"
     "safetyAssessment": string // e.g., "unsafe - traffic nearby", "safe - enclosed area"
   },
+  "keyPoints": string[], // EXACTLY 4 short distinct observations. E.g., ["Found near market", "Dehydrated", "Scared but friendly", "Needs vet"].
+  "description": string, // A human-like narrative of 2-3 lines summarizing the situation.
   "recommendations": string[] // list of immediate actions recommended
 }
 

@@ -68,6 +68,10 @@ export default function PostCard({ report, isMobile, onInView, prevLat, prevLng,
     const isInjured = report.analysisResult?.isInjured;
     const createdDate = report.createdAt ? new Date(report.createdAt) : new Date();
 
+    // Prioritize AI analysis result, fallback to root level (e.g. for mock data)
+    const keyPoints = report.analysisResult?.keyPoints || report.keyPoints;
+    const description = report.analysisResult?.description || report.description;
+
     const ImageModal = () => (
         <Dialog open={isImageModalOpen} onOpenChange={setIsImageModalOpen}>
             <DialogContent className="max-w-[90vw] max-h-[90vh] p-0 border-none bg-transparent shadow-none flex items-center justify-center z-[9999]">
@@ -151,9 +155,9 @@ export default function PostCard({ report, isMobile, onInView, prevLat, prevLng,
                                 )}
 
                                 {/* Key Points - Compact */}
-                                {report.keyPoints && (
+                                {keyPoints && (
                                     <ul className="grid grid-cols-1 gap-1">
-                                        {report.keyPoints.slice(0, 4).map((point: string, idx: number) => (
+                                        {keyPoints.slice(0, 4).map((point: string, idx: number) => (
                                             <li key={idx} className="text-xs text-muted-foreground flex items-start gap-1.5 leading-snug">
                                                 <span className="text-primary/70 mt-0.5">•</span>
                                                 <span>{point}</span>
@@ -163,9 +167,9 @@ export default function PostCard({ report, isMobile, onInView, prevLat, prevLng,
                                 )}
 
                                 {/* Description - Truncated/Compact */}
-                                {report.description && (
+                                {description && (
                                     <p className="text-xs text-muted-foreground leading-relaxed line-clamp-4">
-                                        {report.description}
+                                        {description}
                                     </p>
                                 )}
                             </div>
@@ -235,10 +239,10 @@ export default function PostCard({ report, isMobile, onInView, prevLat, prevLng,
 
                     <div className="space-y-4">
                         {/* Key Points */}
-                        {report.keyPoints && (
+                        {keyPoints && (
                             <div className="bg-white/60 p-3 rounded-xl border border-black/5">
                                 <ul className="text-sm text-foreground/80 space-y-1.5">
-                                    {report.keyPoints.map((point: string, idx: number) => (
+                                    {keyPoints.slice(0, 4).map((point: string, idx: number) => (
                                         <li key={idx} className="flex items-start gap-2">
                                             <span className="text-primary block mt-1.5 w-1 h-1 rounded-full bg-primary shrink-0" />
                                             <span className="leading-snug">{point}</span>
@@ -249,9 +253,9 @@ export default function PostCard({ report, isMobile, onInView, prevLat, prevLng,
                         )}
 
                         {/* Description */}
-                        {report.description && (
+                        {description && (
                             <p className="text-sm text-muted-foreground leading-relaxed">
-                                {report.description}
+                                {description}
                             </p>
                         )}
                     </div>

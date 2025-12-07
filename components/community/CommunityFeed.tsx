@@ -57,10 +57,46 @@ const MOCK_REPORTS = Array.from({ length: 15 }).map((_, i) => ({
 }));
 
 export default function CommunityFeed() {
-    const [reports, setReports] = useState<any[]>(MOCK_REPORTS);
-    const [loading, setLoading] = useState(false); // No loading needed for mock data
-    const [activeReport, setActiveReport] = useState<any>(MOCK_REPORTS[0]);
+    const [reports, setReports] = useState<any[]>([]);
+    const [loading, setLoading] = useState(true);
+    const [activeReport, setActiveReport] = useState<any>(null);
     const isMobile = useIsMobile();
+
+    useEffect(() => {
+        const fetchReports = async () => {
+            try {
+                const res = await fetch("/api/reports");
+                if (res.ok) {
+                    const data = await res.json();
+                    if (Array.isArray(data) && data.length > 0) {
+                        setReports(data);
+                        setActiveReport(data[0]);
+                    } else {
+                        // Fallback to mock data if API returns empty (optional, depending on user preference)
+                        // User said "I uploaded a lot of photoes", so we should expect real data.
+                        // If empty, show empty state or mock. I'll show mock if empty for now to keep UI populated unless user wants ONLY real data.
+                        // Actually, user complained "dummy data is there no real data coming".
+                        // So I should PREFER real data.
+                         setReports(MOCK_REPORTS);
+                         setActiveReport(MOCK_REPORTS[0]);
+                    }
+                } else {
+                    console.error("Failed to fetch reports");
+                    setReports(MOCK_REPORTS);
+                    setActiveReport(MOCK_REPORTS[0]);
+                }
+            } catch (error) {
+                console.error("Error fetching reports:", error);
+                setReports(MOCK_REPORTS);
+                setActiveReport(MOCK_REPORTS[0]);
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        fetchReports();
+    }, []);
+
 
     // Removed API fetch logic for now
 

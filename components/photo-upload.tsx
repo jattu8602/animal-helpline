@@ -16,6 +16,7 @@ export function PhotoUpload() {
     const [isAnalyzing, setIsAnalyzing] = useState(false);
     const [analysisResult, setAnalysisResult] = useState<any>(null);
     const [error, setError] = useState<string | null>(null);
+    const [readableLocation, setReadableLocation] = useState<string | null>(null);
     const [location, setLocation] = useState<{ lat: number; lng: number } | null>(null);
     const [locationError, setLocationError] = useState<string | null>(null);
 
@@ -40,11 +41,38 @@ export function PhotoUpload() {
     const getLocation = () => {
         if (navigator.geolocation) {
             navigator.geolocation.getCurrentPosition(
-                (position) => {
-                    setLocation({
-                        lat: position.coords.latitude,
-                        lng: position.coords.longitude,
-                    });
+                async (position) => {
+                    const lat = position.coords.latitude;
+                    const lng = position.coords.longitude;
+                    setLocation({ lat, lng });
+
+                    // Reverse Geocode
+                    try {
+                        // Using OpenStreetMap Nominatim (Free, no key required for low volume)
+                        const res = await fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lng}&zoom=18&addressdetails=1`);
+                        if (res.ok) {
+                            const data = await res.json();
+                            if (data && data.address) {
+                                // Construct a readable location: Street/Area, City
+                                const addr = data.address;
+                                const street = addr.road || addr.pedestrian || addr.suburb || addr.neighbourhood || "";
+                                const city = addr.city || addr.town || addr.village || addr.county || "";
+                                const state = addr.state || "";
+
+                                // Format: "Sector 18, Noida" or "Main Road, Delhi"
+                                const parts = [street, city].filter(Boolean);
+                                if (parts.length > 0) {
+                                    setReadableLocation(parts.join(", "));
+                                } else {
+                                    setReadableLocation(city || state || "Unknown Location");
+                                }
+                            }
+                        }
+                    } catch (error) {
+                        console.error("Reverse geocoding failed:", error);
+                        // Fallback remains null, will use coordinates if needed
+                    }
+
                     setLocationError(null);
                     setShowLocationDialog(false); // Close dialog if successful
                 },
@@ -145,7 +173,7 @@ export function PhotoUpload() {
                         deviceId,
                         imageUrl,
                         analysisResult: analysis,
-                        location: location ? `${location.lat}, ${location.lng}` : "Unknown",
+                        location: readableLocation || (location ? `${location.lat}, ${location.lng}` : "Unknown"),
                         latitude: location?.lat,
                         longitude: location?.lng,
                     }),

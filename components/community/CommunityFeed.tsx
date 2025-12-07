@@ -1,8 +1,14 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import dynamic from "next/dynamic";
 import PostCard from "./PostCard";
-import CommunityMap from "./CommunityMap";
+
+const CommunityMap = dynamic(() => import("./CommunityMap"), {
+    ssr: false,
+    loading: () => <div className="h-full w-full bg-muted animate-pulse" />,
+});
+
 import { Loader2 } from "lucide-react";
 import { ScrollArea } from "@/components/ui/scroll-area";
 

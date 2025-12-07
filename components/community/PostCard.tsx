@@ -5,7 +5,12 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Heart, MapPin } from "lucide-react";
 import { formatDistanceToNow } from "date-fns";
-import CommunityMap from "./CommunityMap";
+import dynamic from "next/dynamic";
+
+const CommunityMap = dynamic(() => import("./CommunityMap"), {
+    ssr: false,
+    loading: () => <div className="w-full h-full bg-muted animate-pulse rounded-2xl" />,
+});
 import {
     Dialog,
     DialogContent,

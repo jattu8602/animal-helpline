@@ -56,11 +56,23 @@ function MapUpdater({ lat, lng, startLat, startLng, isInView }: { lat: number; l
     }, [isInView]);
 
     useEffect(() => {
+        // Determine start coordinates.
+        // If provided, use them.
+        // If not (first post), use a dummy offset for cinematic effect.
+        let effectiveStartLat = startLat;
+        let effectiveStartLng = startLng;
+
+        if ((!effectiveStartLat || !effectiveStartLng) && !prevLoc.current) {
+             // Create a dummy start location for the very first load
+             effectiveStartLat = lat + 0.005;
+             effectiveStartLng = lng + 0.005;
+        }
+
         // Scenario 1: Animation from Previous Post (Cinematic Mode)
-        if (startLat && startLng) {
+        if (effectiveStartLat && effectiveStartLng) {
             if (!hasAnimated.current) {
                 // Initialize/Hold at start location
-                map.setView([startLat, startLng], 17);
+                map.setView([effectiveStartLat, effectiveStartLng], 17);
 
                 // Only start animation when in view
                 if (isInView) {
@@ -81,7 +93,8 @@ function MapUpdater({ lat, lng, startLat, startLng, isInView }: { lat: number; l
 
         // Scenario 2: Standard Behavior (Desktop or No Previous Location)
         if (!prevLoc.current) {
-            // First load: instant jump if no cinematic start
+            // This fallback shouldn't be hit often now for mobile first load due to above logic,
+            // but kept for safety or desktop without start props if needed.
              if (!startLat) {
                 map.setView([lat, lng], 17);
             }

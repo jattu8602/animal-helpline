@@ -6,6 +6,7 @@ Analyze the image and provide a JSON response with the following structure:
   "isAnimal": boolean, // true if an animal is detected
   "animalType": string | null, // e.g., "dog", "cat", "cow", etc.
   "isInjured": boolean, // true if the animal appears injured
+  "statusLabel": "Safe" | "Needs Food" | "Medical Help" | "Critical" | "Healthy", // Short status summary
   "injuryDetails": {
     "severity": "low" | "medium" | "high" | "critical" | "unknown",
     "description": string, // detailed description of visible injuries

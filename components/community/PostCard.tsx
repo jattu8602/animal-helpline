@@ -71,6 +71,15 @@ export default function PostCard({ report, isMobile, onInView, prevLat, prevLng,
     // Prioritize AI analysis result, fallback to root level (e.g. for mock data)
     const keyPoints = report.analysisResult?.keyPoints || report.keyPoints;
     const description = report.analysisResult?.description || report.description;
+    const statusLabel = report.analysisResult?.statusLabel || report.analysisResult?.injuryDetails?.severity || "Unknown";
+
+    // Determine badge variant based on status
+    const getBadgeVariant = (status: string) => {
+        const s = status.toLowerCase();
+        if (s === 'critical' || s === 'medical help' || s === 'high') return 'destructive'; // Red
+        if (s === 'needs food' || s === 'medium') return 'secondary'; // Green (default secondary is green)
+        return 'secondary'; // Default Green for Safe/Healthy
+    };
 
     const ImageModal = () => (
         <Dialog open={isImageModalOpen} onOpenChange={setIsImageModalOpen}>
@@ -146,13 +155,11 @@ export default function PostCard({ report, isMobile, onInView, prevLat, prevLng,
                             </div>
 
                             <div className="space-y-3 mt-3">
-                                {severity && (
-                                    <div className="flex items-center gap-2">
-                                        <Badge variant={severity === 'critical' ? 'destructive' : 'secondary'} className="text-[10px] px-2 h-5">
-                                            {severity}
-                                        </Badge>
-                                    </div>
-                                )}
+                                <div className="flex items-center gap-2">
+                                    <Badge variant={getBadgeVariant(statusLabel)} className="text-[10px] px-2 h-5 capitalize">
+                                        {statusLabel}
+                                    </Badge>
+                                </div>
 
                                 {/* Key Points - Compact */}
                                 {keyPoints && (
@@ -238,6 +245,13 @@ export default function PostCard({ report, isMobile, onInView, prevLat, prevLng,
                     </div>
 
                     <div className="space-y-4">
+                        {/* Status Badge */}
+                        <div className="mb-2">
+                             <Badge variant={getBadgeVariant(statusLabel)} className="text-xs px-2 py-0.5 capitalize shadow-sm">
+                                {statusLabel}
+                            </Badge>
+                        </div>
+
                         {/* Key Points */}
                         {keyPoints && (
                             <div className="bg-white/60 p-3 rounded-xl border border-black/5">
